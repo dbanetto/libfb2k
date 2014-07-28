@@ -1,63 +1,75 @@
 #include <UnitTest++.h>
 #include "libfb2k/libfb2k.h"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// To add a test, simply put the following code in the a .cpp file of your choice:
-//
-// =================================
-// Simple Test
-// =================================
-//
-//  TEST(YourTestName)
-//  {
-//  }
-//
-// The TEST macro contains enough machinery to turn this slightly odd-looking syntax into legal C++, and automatically register the test in a global list. 
-// This test list forms the basis of what is executed by RunAllTests().
-//
-// If you want to re-use a set of test data for more than one test, or provide setup/teardown for tests, 
-// you can use the TEST_FIXTURE macro instead. The macro requires that you pass it a class name that it will instantiate, so any setup and teardown code should be in its constructor and destructor.
-//
-//  struct SomeFixture
-//  {
-//    SomeFixture() { /* some setup */ }
-//    ~SomeFixture() { /* some teardown */ }
-//
-//    int testData;
-//  };
-// 
-//  TEST_FIXTURE(SomeFixture, YourTestName)
-//  {
-//    int temp = testData;
-//  }
-//
-// =================================
-// Test Suites
-// =================================
-// 
-// Tests can be grouped into suites, using the SUITE macro. A suite serves as a namespace for test names, so that the same test name can be used in two difference contexts.
-//
-//  SUITE(YourSuiteName)
-//  {
-//    TEST(YourTestName)
-//    {
-//    }
-//
-//    TEST(YourOtherTestName)
-//    {
-//    }
-//  }
-//
-// This will place the tests into a C++ namespace called YourSuiteName, and make the suite name available to UnitTest++. 
-// RunAllTests() can be called for a specific suite name, so you can use this to build named groups of tests to be run together.
-// Note how members of the fixture are used as if they are a part of the test, since the macro-generated test class derives from the provided fixture class.
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "libfb2k/Block.h"
 
 // run all tests
 int main(int argc, char **argv)
 {
 	return UnitTest::RunAllTests();
+}
+
+SUITE(BlockParsing)
+{
+	TEST(BlockSimpleParse)
+	{
+		fb2k::Block blk = fb2k::Block("$if(true,then,false)");
+		std::vector<fb2k::Function> fn = blk.getFunctions();
+		CHECK(fn.size() == 1);
+		CHECK(fn[0].name == "if");
+		CHECK(fn[0].args.size() == 3);
+
+		CHECK(fn[0].args[0] == "true");
+		CHECK(fn[0].args[1] == "then");
+		CHECK(fn[0].args[2] == "false");
+
+		CHECK(blk.getFormattedText() == "{0}");
+	}
+
+	TEST(BlockSimpleParseExtra)
+	{
+		fb2k::Block blk = fb2k::Block("$if(true,then,false) other text");
+		std::vector<fb2k::Function> fn = blk.getFunctions();
+		CHECK(fn.size() == 1);
+		CHECK(fn[0].name == "if");
+		CHECK(fn[0].args.size() == 3);
+
+		CHECK(fn[0].args[0] == "true");
+		CHECK(fn[0].args[1] == "then");
+		CHECK(fn[0].args[2] == "false");
+
+
+		CHECK(blk.getFormattedText() == "{0} other text");
+	}
+
+	TEST(BlockSimpleParseMulti)
+	{
+		fb2k::Block blk = fb2k::Block("$if(true,then,false) $if(false,not,stuff)");
+		std::vector<fb2k::Function> fn = blk.getFunctions();
+		CHECK(fn.size() == 2);
+
+		CHECK(fn[0].name == "if");
+		CHECK(fn[0].args.size() == 3);
+
+		CHECK(fn[0].args[0] == "true");
+		CHECK(fn[0].args[1] == "then");
+		CHECK(fn[0].args[2] == "false");
+
+		CHECK(fn[1].name == "if");
+		CHECK(fn[1].args.size() == 3);
+
+		CHECK(fn[1].args[0] == "false");
+		CHECK(fn[1].args[1] == "not");
+		CHECK(fn[1].args[2] == "stuff");
+
+
+		CHECK(blk.getFormattedText() == "{0} {1}");
+	}
+
+	TEST(BlockSpeicalChars)
+	{
+		//Add more speical characters
+		fb2k::Block blk = fb2k::Block("$$");
+
+		CHECK(blk.getFormattedText() == "$");
+	}
 }

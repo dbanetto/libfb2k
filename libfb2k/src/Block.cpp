@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <sstream>
-#define DEBUG
+
 using namespace fb2k;
 
 Block::Block(std::string statement)
@@ -18,6 +18,16 @@ Block::~Block()
 std::string Block::getStatement()
 {
 	return this->raw_statement;
+}
+
+std::vector<Function> Block::getFunctions()
+{
+	return this->functions;
+}
+
+std::string Block::getFormattedText()
+{
+	return this->formatted_statement;
 }
 
 enum ParsingState {

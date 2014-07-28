@@ -30,6 +30,8 @@ namespace fb2k
 			BlockResult eval();
 
 			std::string getStatement();
+			std::string getFormattedText();
+			std::vector<fb2k::Function> getFunctions();
 		private:
 			std::vector<Block> children;
 			std::vector<Function> functions;
