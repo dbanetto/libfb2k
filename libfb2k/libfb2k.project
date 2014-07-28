@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="libfb2k" InternalType="Library">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
 		"name":	"Debug",
@@ -13,21 +16,20 @@
 		"parentProject":	""
 	}]]]>
     </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
-    </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="libfb2k.cpp"/>
+    <File Name="src/libfb2k.cpp"/>
+    <File Name="src/Block.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
-    <File Name="include/libfb2k.h"/>
+    <File Name="include/libfb2k/Block.h"/>
+    <File Name="include/libfb2k/libfb2k.h"/>
   </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>
-      <Compiler Options="-std=c++11" C_Options="" Assembler="">
+      <Compiler Options="-std=c++11 -fPIC" C_Options="" Assembler="">
         <IncludePath Value="."/>
         <IncludePath Value="include"/>
       </Compiler>
