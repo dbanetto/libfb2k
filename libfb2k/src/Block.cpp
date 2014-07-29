@@ -5,6 +5,14 @@
 
 using namespace fb2k;
 
+Block::Block()
+{
+	this->parsed = false;
+	functions = std::vector<Function>();
+	this->raw_statement = "";
+	this->formatted_statement = "";
+}
+
 Block::Block(std::string statement)
 {
 	this->parse(statement);
@@ -22,7 +30,7 @@ std::string Block::getStatement()
 
 std::vector<Function> Block::getFunctions()
 {
-	return this->functions;
+	return functions;
 }
 
 std::string Block::getFormattedText()
@@ -116,5 +124,6 @@ int Block::parse(std::string statement)
 		}
 	}
 #endif
+	this->parsed = true;
 	return 0;
 }

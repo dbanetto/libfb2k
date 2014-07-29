@@ -23,6 +23,7 @@ namespace fb2k
 
 	class Block {
 		public:
+			Block();
 			Block(std::string statement);
 			virtual ~Block();
 
@@ -32,11 +33,14 @@ namespace fb2k
 			std::string getStatement();
 			std::string getFormattedText();
 			std::vector<fb2k::Function> getFunctions();
+			bool isParsed();
 		private:
 			std::vector<Block> children;
 			std::vector<Function> functions;
 			std::string raw_statement;
 			std::string formatted_statement;
+
+			bool parsed;
 	};
 }
 #endif // LIBFB2K_BLOCK_H
