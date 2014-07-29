@@ -96,6 +96,11 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL(blk.getFormattedText(), "{0} 友");
 	}
+
+	TEST(BlockSimpleParseInvaildName)
+	{
+		CHECK_THROW(fb2k::Block("$f a i l m e (true,then,false)") , fb2k::InvaildFuntionName);
+	}
 }
 
 

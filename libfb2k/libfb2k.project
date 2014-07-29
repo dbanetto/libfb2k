@@ -26,6 +26,7 @@
   <VirtualDirectory Name="include">
     <File Name="include/libfb2k/Block.h"/>
     <File Name="include/libfb2k/libfb2k.h"/>
+    <File Name="include/error.h"/>
   </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "error.h"
+
 #define LIBFB2K_CMD_START "$"
 #define LIBFB2K_ARGS_START "("
 #define LIBFB2K_ARGS_END ")"

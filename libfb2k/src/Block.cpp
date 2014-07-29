@@ -1,7 +1,7 @@
 #include "libfb2k/Block.h"
-
 #include <iostream>
 #include <sstream>
+#include <ctype.h>
 
 using namespace fb2k;
 
@@ -52,12 +52,23 @@ int Block::parse(std::string statement)
 	Function building;
 	int args_index = 0;
 	int scope = 0;
+
+	//keep track of the character position in the string
+	int row = 1 , col = 0;
+
 	ParsingState state = READING;
 	for (auto itr = statement.begin(); itr < statement.end(); itr++ )
 	{
 		char cur = *itr;
 		char last = (itr != statement.begin() ? *(itr - 1) : '\0' );
 		char peek = (itr != statement.end() ? *(itr + 1) : '\0' );
+
+		col++;
+		if (cur == '\n')
+		{
+			row++;
+			col = 1;
+		}
 
 		//Start of function
 		if (cur == '$' && !(peek == '$' || last == '$') && state == READING)
@@ -75,7 +86,14 @@ int Block::parse(std::string statement)
 				state = FUNCTION_ARGS;
 				scope = 1;
 			} else {
-				building.name += cur;
+				if (isalnum(cur))
+				{
+					building.name += cur;
+				} else {
+					std::stringstream ss;
+					ss << "Functions names can only contain alphanumerics at line:" << row << " column:" << col << ".";
+					throw fb2k::InvaildFuntionName(ss.str());
+				}
 			}
 		} else if (state == FUNCTION_ARGS)
 		{
@@ -104,11 +122,9 @@ int Block::parse(std::string statement)
 			if (!(cur == '$' && peek == '$'))
 				parsed << cur;
 		}
-
 #ifdef DEBUG_VERB
 	std::cout << "Last : " << last << " Current : " << cur << " Next : " << peek << " State : " << state << " Scope : " << scope << std::endl;
 #endif
-
 	}
 
 	this->formatted_statement = parsed.str();
