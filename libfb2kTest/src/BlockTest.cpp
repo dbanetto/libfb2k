@@ -66,6 +66,36 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL(blk.getFormattedText(), "$");
 	}
+
+	TEST(BlockSimpleUnicodeParse)
+	{
+		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ)");
+		std::vector<fb2k::Function> fn = blk.getFunctions();
+		CHECK_EQUAL(fn.size(), 1);
+		CHECK_EQUAL(fn[0].name, "if");
+		CHECK_EQUAL(fn[0].args.size(), 3);
+
+		CHECK_EQUAL(fn[0].args[0], "♡");
+		CHECK_EQUAL(fn[0].args[1], "馬鹿");
+		CHECK_EQUAL(fn[0].args[2], "バカ");
+
+		CHECK_EQUAL(blk.getFormattedText(), "{0}");
+	}
+
+	TEST(BlockSimpleUnicodeParseExtra)
+	{
+		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ) 友");
+		std::vector<fb2k::Function> fn = blk.getFunctions();
+		CHECK_EQUAL(fn.size(), 1);
+		CHECK_EQUAL(fn[0].name, "if");
+		CHECK_EQUAL(fn[0].args.size(), 3);
+
+		CHECK_EQUAL(fn[0].args[0], "♡");
+		CHECK_EQUAL(fn[0].args[1], "馬鹿");
+		CHECK_EQUAL(fn[0].args[2], "バカ");
+
+		CHECK_EQUAL(blk.getFormattedText(), "{0} 友");
+	}
 }
 
 
