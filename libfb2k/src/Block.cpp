@@ -60,8 +60,8 @@ int Block::parse(std::string statement)
 	for (auto itr = statement.begin(); itr < statement.end(); itr++ )
 	{
 		char cur = *itr;
-		char last = (itr != statement.begin() ? *(itr - 1) : '\0' );
-		char peek = (itr != statement.end() ? *(itr + 1) : '\0' );
+		char last = (itr != statement.begin() ? *(itr - 1) : ' ' );
+		char peek = (itr != statement.end() ? *(itr + 1) : ' ' );
 
 		col++;
 		if (cur == '\n')
@@ -81,10 +81,10 @@ int Block::parse(std::string statement)
 			state = FUNCTION_NAME;
 		} else if (state == FUNCTION_NAME)
 		{
-			if (cur == '(' && !(peek == '(' || last == '('))
+			if (cur == '(' && !(last == '\\'))
 			{
 				state = FUNCTION_ARGS;
-				scope = 1;
+				scope++;
 			} else {
 				if (isalnum(cur))
 				{
@@ -123,10 +123,14 @@ int Block::parse(std::string statement)
 				parsed << cur;
 		}
 #ifdef DEBUG_VERB
-	std::cout << "Last : " << last << " Current : " << cur << " Next : " << peek << " State : " << state << " Scope : " << scope << std::endl;
+	std::cout << "State : " << state << " Scope : " << scope  << " Last : " << last << " Current : " << cur << " Next : " << peek << std::endl;
 #endif
 	}
 
+	if (scope != 0)
+	{
+		throw fb2k::SyntaxError("Mismatch of brackets");
+	}
 	this->formatted_statement = parsed.str();
 
 #ifdef DEBUG

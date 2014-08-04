@@ -12,5 +12,12 @@ namespace fb2k {
 			InvaildFuntionName(const std::string& msg)
 				: std::runtime_error(msg) {};
 	};
+
+	class SyntaxError : public std::runtime_error
+	{
+		public:
+			SyntaxError(const std::string& msg)
+				: std::runtime_error(msg) {};
+	};
 };
 #endif // LIBFB2K_ERROR_H

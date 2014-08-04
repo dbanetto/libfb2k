@@ -101,6 +101,13 @@ SUITE(BlockParsing)
 	{
 		CHECK_THROW(fb2k::Block("$f a i l m e (true,then,false)") , fb2k::InvaildFuntionName);
 	}
+
+	TEST(BlockSimpleParseInvaildBrackets)
+	{
+		CHECK_THROW(fb2k::Block("$if(errro") , fb2k::SyntaxError);
+		CHECK_THROW(fb2k::Block("$if(e(rrro") , fb2k::SyntaxError);
+		CHECK_THROW(fb2k::Block("$if(errro") , fb2k::SyntaxError);
+	}
 }
 
 
