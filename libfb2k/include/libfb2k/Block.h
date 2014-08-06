@@ -40,7 +40,7 @@ namespace fb2k
 			std::vector<Block> children;
 			std::vector<Function> functions;
 			std::string raw_statement;
-			std::string formatted_statement;
+			std::string parsed_statement;
 
 			bool parsed;
 	};
