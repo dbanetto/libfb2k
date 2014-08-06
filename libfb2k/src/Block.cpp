@@ -21,6 +21,7 @@ Block::Block()
 {
 	this->parsed = false;
 	functions = std::vector<Function>();
+	variables = std::vector<std::string>();
 	this->raw_statement = "";
 	this->parsed_statement = "";
 }
@@ -45,6 +46,11 @@ std::vector<Function> Block::getFunctions()
 	return functions;
 }
 
+std::vector<std::string> Block::getVariables()
+{
+	return  variables;
+}
+
 std::string Block::getFormattedText()
 {
 	return this->parsed_statement;
@@ -53,7 +59,8 @@ std::string Block::getFormattedText()
 enum ParsingState {
 	READING = 0,
 	FUNCTION_NAME = 10,
-	FUNCTION_ARGS = 11
+	FUNCTION_ARGS = 11,
+	VARIABLE_NAME = 20
 };
 
 int Block::parse(std::string statement)
@@ -116,18 +123,36 @@ int Block::parse(std::string statement)
 			}
 		}
 
-		//Start of function
-		if (cur == '$' && !escaped && state == READING)
+		// TODO : add support for [$s()], (implicit if's)
+		// TODO : add support for %var%, variables
+
+		// Start of function
+		if (cur == LIBFB2K_CMD_START && !escaped && state == READING)
 		{
 			building = Function();
 			building.name = "";
 			building.args = std::vector<std::string>();
 			building.args.push_back("");
-			args_index = 0;
 			state = FUNCTION_NAME;
+		} else if (cur == LIBFB2K_VAR_START && !escaped && state == READING)
+		{
+			variables.push_back("");
+			state = VARIABLE_NAME;
+		} else if (state == VARIABLE_NAME)
+		{
+			if (cur == LIBFB2K_VAR_END)
+			{
+				// TODO : find a better way to represent a 'variable' in the parsed string
+				parsed << "[" << variables.size() - 1 << "]";
+				args_index++;
+				state = READING;
+			} else {
+				variables[variables.size() - 1] += cur;
+			}
+
 		} else if (state == FUNCTION_NAME)
 		{
-			if (cur == '(' && !escaped)
+			if (cur == LIBFB2K_ARGS_START && !escaped)
 			{
 				state = FUNCTION_ARGS;
 				scope++;
@@ -137,31 +162,31 @@ int Block::parse(std::string statement)
 					building.name += cur;
 				} else {
 					std::stringstream ss;
+					// TODO : Should unicode function names be allowed?
 					ss << "Functions names can only contain alphanumerics at line:" << row << " column:" << col << ".";
 					throw fb2k::InvaildFuntionName(ss.str());
 				}
 			}
 		} else if (state == FUNCTION_ARGS)
 		{
-			if (cur == '(' && !escaped)
+			if (cur == LIBFB2K_ARGS_START && !escaped)
 			{
 				scope++;
-			} else if (cur == ')' && !escaped)
+			} else if (cur == LIBFB2K_ARGS_END && !escaped)
 			{
 				scope--;
 				if (scope == 0)
 				{
 					this->functions.push_back(building);
-					parsed << "{" << this->functions.size() - 1 << "}";
+					parsed << "{" << functions.size() - 1 << "}";
 					state = READING;
 				}
 			}
 			if (scope == 1 && cur == ',' && !escaped)
 			{
-				args_index++;
 				building.args.push_back("");
 			} else {
-					building.args[args_index] += cur;
+				building.args[building.args.size() - 1] += cur;
 			}
 		} else {
 			// Add all the escape/normal text that is not in a function into the 'parsed' string
@@ -172,10 +197,13 @@ int Block::parse(std::string statement)
 #endif
 	}
 
+	// Post parse error checking
 	if (scope != 0)
-	{
 		throw fb2k::SyntaxError("Mismatch of brackets");
-	}
+
+	if (state != READING)
+		throw fb2k::SyntaxError("State did not reslove");
+
 	this->parsed_statement = parsed.str();
 
 #ifdef DEBUG
@@ -187,6 +215,12 @@ int Block::parse(std::string statement)
 		{
 			std::cout << "\tArg : " << arg << std::endl;
 		}
+	}
+
+	std::cout << "Variables :" << std::endl;
+	for (auto var : this->variables)
+	{
+		std::cout << "\t" << var << std::endl;
 	}
 #endif
 	this->parsed = true;

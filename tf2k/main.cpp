@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	std::cout << "Arguments >" <<std::endl;
 	for (int i = 0; i < argc; i++)
 	{
-		fb2k::Block blk = fb2k::Block("$if(true,then,$grt(n,n)else) + $not(true) Get your at for the $$10 fool()");
+		fb2k::Block blk = fb2k::Block("$if(true,then,$grt(n,n)else) %var% + $not(true) Get your at for the \\$10 fool()");
 		std::cout << '\t' << i << " : " << argv[i] <<std::endl;
 		std::cout << '\t' << blk.getStatement() << std::endl;
 	}
