@@ -5,12 +5,24 @@
 
 using namespace fb2k;
 
+/*
+ * TODO : Add more characters that should be
+ * escaped with a prepeneding : \
+ * */
+std::string to_escape = "\\(),[]$nt";
+/*
+ * Character to replace the escaped sequence
+ * index of the escaped character is the same as to_escape
+ */
+std::string to_escaped ="\\(),[]$\n\t";
+
+
 Block::Block()
 {
 	this->parsed = false;
 	functions = std::vector<Function>();
 	this->raw_statement = "";
-	this->formatted_statement = "";
+	this->parsed_statement = "";
 }
 
 Block::Block(std::string statement)
@@ -35,7 +47,7 @@ std::vector<Function> Block::getFunctions()
 
 std::string Block::getFormattedText()
 {
-	return this->formatted_statement;
+	return this->parsed_statement;
 }
 
 enum ParsingState {
@@ -57,11 +69,18 @@ int Block::parse(std::string statement)
 	int row = 1 , col = 0;
 
 	ParsingState state = READING;
-	for (auto itr = statement.begin(); itr < statement.end(); itr++ )
+
+	// Use ' ' instead of '\0' easier to debug
+	char  last = ' ',  cur = ' ', next = *(statement.begin());
+	bool escaped = false;
+	auto itr = statement.begin();
+	for (int i = 0; i < statement.length(); i++ )
 	{
-		char cur = *itr;
-		char last = (itr != statement.begin() ? *(itr - 1) : ' ' );
-		char peek = (itr != statement.end() ? *(itr + 1) : ' ' );
+		escaped = false;
+		last = cur;
+		cur = next;
+		itr++;
+		next = ( itr == statement.end() ? ' ' : *itr );
 
 		col++;
 		if (cur == '\n')
@@ -70,8 +89,35 @@ int Block::parse(std::string statement)
 			col = 1;
 		}
 
+		// Skip null charaters
+		if (cur == '\0')
+			continue;
+
+		// Special Characters
+		if (cur == '\\')
+		{
+			// TODO : refractor this to make it cleaner
+			for (int n = 0; n < to_escape.length(); n++)
+			{
+				if (next == to_escape[n])
+				{
+					cur = to_escaped[n];
+					next = '\0';
+					escaped = true;
+					break;
+				}
+			}
+			if (!escaped)
+			{
+				//Throw unkown escape character Error
+				std::stringstream ss;
+				ss << "Unkown escape character \\" << next << " at line:" << col << " row:" << row;
+				throw fb2k::SyntaxError(ss.str());
+			}
+		}
+
 		//Start of function
-		if (cur == '$' && !(peek == '$' || last == '$') && state == READING)
+		if (cur == '$' && !escaped && state == READING)
 		{
 			building = Function();
 			building.name = "";
@@ -81,7 +127,7 @@ int Block::parse(std::string statement)
 			state = FUNCTION_NAME;
 		} else if (state == FUNCTION_NAME)
 		{
-			if (cur == '(' && !(last == '\\'))
+			if (cur == '(' && !escaped)
 			{
 				state = FUNCTION_ARGS;
 				scope++;
@@ -97,10 +143,10 @@ int Block::parse(std::string statement)
 			}
 		} else if (state == FUNCTION_ARGS)
 		{
-			if (cur == '(')
+			if (cur == '(' && !escaped)
 			{
 				scope++;
-			} else if (cur == ')')
+			} else if (cur == ')' && !escaped)
 			{
 				scope--;
 				if (scope == 0)
@@ -110,7 +156,7 @@ int Block::parse(std::string statement)
 					state = READING;
 				}
 			}
-			if (scope == 1 && cur == ',')
+			if (scope == 1 && cur == ',' && !escaped)
 			{
 				args_index++;
 				building.args.push_back("");
@@ -118,12 +164,11 @@ int Block::parse(std::string statement)
 					building.args[args_index] += cur;
 			}
 		} else {
-			//Double $ in raw is equal to one in formated
-			if (!(cur == '$' && peek == '$'))
-				parsed << cur;
+			// Add all the escape/normal text that is not in a function into the 'parsed' string
+			parsed << cur;
 		}
 #ifdef DEBUG_VERB
-	std::cout << "State : " << state << " Scope : " << scope  << " Last : " << last << " Current : " << cur << " Next : " << peek << std::endl;
+	std::cout << "State : " << state << " Scope : " << scope  << " Last : " << last << " Current : " << cur << " Next : " << next << std::endl;
 #endif
 	}
 
@@ -131,10 +176,10 @@ int Block::parse(std::string statement)
 	{
 		throw fb2k::SyntaxError("Mismatch of brackets");
 	}
-	this->formatted_statement = parsed.str();
+	this->parsed_statement = parsed.str();
 
 #ifdef DEBUG
-	std::cout << "Formated : " << formatted_statement << std::endl;
+	std::cout << "Formated : " << parsed_statement << std::endl;
 	for (auto f : this->functions)
 	{
 		std::cout << "Function : " << f.name << std::endl;

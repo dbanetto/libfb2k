@@ -6,10 +6,13 @@
 
 #include "error.h"
 
-#define LIBFB2K_CMD_START "$"
-#define LIBFB2K_ARGS_START "("
-#define LIBFB2K_ARGS_END ")"
+#define LIBFB2K_CMD_START '$'
 
+#define LIBFB2K_ARGS_START '('
+#define LIBFB2K_ARGS_END ')'
+
+#define LIBFB2K_VAR_START '%'
+#define LIBFB2K_VAR_END '%'
 
 namespace fb2k
 {
@@ -35,12 +38,16 @@ namespace fb2k
 			std::string getStatement();
 			std::string getFormattedText();
 			std::vector<fb2k::Function> getFunctions();
+			std::vector<std::string> getVariables();
+
 			bool isParsed();
 		private:
 			std::vector<Block> children;
 			std::vector<Function> functions;
+			std::vector<std::string> variables;
+
 			std::string raw_statement;
-			std::string formatted_statement;
+			std::string parsed_statement;
 
 			bool parsed;
 	};

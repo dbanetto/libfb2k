@@ -61,10 +61,22 @@ SUITE(BlockParsing)
 
 	TEST(BlockSpeicalChars)
 	{
-		//Add more speical characters
-		fb2k::Block blk = fb2k::Block("$$");
-
+		// Add more speical characters or escape characters
+		// TODO : Support $$ -> $ when parsed?
+		fb2k::Block blk = fb2k::Block("\\$");
 		CHECK_EQUAL(blk.getFormattedText(), "$");
+
+		blk = fb2k::Block("\\(\\)");
+		CHECK_EQUAL(blk.getFormattedText(), "()");
+
+		blk = fb2k::Block("\\\\");
+		CHECK_EQUAL(blk.getFormattedText(), "\\");
+
+		blk = fb2k::Block("\\,");
+		CHECK_EQUAL(blk.getFormattedText(), ",");
+
+		blk = fb2k::Block("\\t\\n");
+		CHECK_EQUAL(blk.getFormattedText(), "\t\n");
 	}
 
 	TEST(BlockSimpleUnicodeParse)
@@ -99,7 +111,9 @@ SUITE(BlockParsing)
 
 	TEST(BlockSimpleParseInvaildName)
 	{
-		CHECK_THROW(fb2k::Block("$f a i l m e (true,then,false)") , fb2k::InvaildFuntionName);
+		CHECK_THROW(fb2k::Block("$f a i l m e ()") , fb2k::InvaildFuntionName);
+		CHECK_THROW(fb2k::Block("$友()") , fb2k::InvaildFuntionName); // TODO : Should unicode function names be allowed?
+		CHECK_THROW(fb2k::Block("$.xX~~420^Blaze^it~~Xx.(") , fb2k::InvaildFuntionName);
 	}
 
 	TEST(BlockSimpleParseInvaildBrackets)
@@ -108,6 +122,10 @@ SUITE(BlockParsing)
 		CHECK_THROW(fb2k::Block("$if(e(rrro") , fb2k::SyntaxError);
 		CHECK_THROW(fb2k::Block("$if(errro") , fb2k::SyntaxError);
 	}
+
+	TEST(BlockSimpleParseInvaildEscapeChars)
+	{
+		// Unsupported Escape Characters
+		CHECK_THROW(fb2k::Block("\\0") , fb2k::SyntaxError);
+	}
 }
-
-
