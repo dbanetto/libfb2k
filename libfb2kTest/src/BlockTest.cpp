@@ -7,56 +7,56 @@ SUITE(BlockParsing)
 	TEST(BlockParse)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,then,false)");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
-		CHECK_EQUAL(fn.size(), 1);
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 3);
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(1, fn.size());
+		CHECK_EQUAL("if" ,fn[0].first);
+		CHECK_EQUAL(3, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "true");
-		CHECK_EQUAL(fn[0].args[1], "then");
-		CHECK_EQUAL(fn[0].args[2], "false");
+		CHECK_EQUAL("true", fn[0].second[0].getStatement());
+		CHECK_EQUAL("then", fn[0].second[1].getStatement());
+		CHECK_EQUAL("false", fn[0].second[2].getStatement());
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0}");
+		CHECK_EQUAL("{0}",blk.getFormattedText());
 	}
 
 	TEST(BlockParseExtra)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,then,false) other text");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
-		CHECK_EQUAL(fn.size(), 1);
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 3);
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(1, fn.size());
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(3, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "true");
-		CHECK_EQUAL(fn[0].args[1], "then");
-		CHECK_EQUAL(fn[0].args[2], "false");
+		CHECK_EQUAL("true", fn[0].second[0].getStatement());
+		CHECK_EQUAL("then", fn[0].second[1].getStatement());
+		CHECK_EQUAL("false", fn[0].second[2].getStatement());
 
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0} other text");
+		CHECK_EQUAL("{0} other text", blk.getFormattedText());
 	}
 
 	TEST(BlockParseMulti)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,then,false) $func(false,not,stuff)");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
-		CHECK_EQUAL(fn.size(), 2);
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(2, fn.size());
 
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 3);
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(3, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "true");
-		CHECK_EQUAL(fn[0].args[1], "then");
-		CHECK_EQUAL(fn[0].args[2], "false");
+		CHECK_EQUAL("true", fn[0].second[0].getStatement());
+		CHECK_EQUAL("then", fn[0].second[1].getStatement());
+		CHECK_EQUAL("false", fn[0].second[2].getStatement());
 
-		CHECK_EQUAL(fn[1].name, "func");
-		CHECK_EQUAL(fn[1].args.size(), 3);
+		CHECK_EQUAL("func", fn[1].first);
+		CHECK_EQUAL(3, fn[1].second.size());
 
-		CHECK_EQUAL(fn[1].args[0], "false");
-		CHECK_EQUAL(fn[1].args[1], "not");
-		CHECK_EQUAL(fn[1].args[2], "stuff");
+		CHECK_EQUAL("false", fn[1].second[0].getStatement());
+		CHECK_EQUAL("not", fn[1].second[1].getStatement());
+		CHECK_EQUAL("stuff", fn[1].second[2].getStatement());
 
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0} {1}");
+		CHECK_EQUAL("{0} {1}", blk.getFormattedText());
 	}
 
 	TEST(BlockSpeicalChars)
@@ -64,49 +64,49 @@ SUITE(BlockParsing)
 		// Add more speical characters or escape characters
 		// TODO : Support $$ -> $ when parsed?
 		fb2k::Block blk = fb2k::Block("\\$");
-		CHECK_EQUAL(blk.getFormattedText(), "$");
+		CHECK_EQUAL("$", blk.getFormattedText());
 
 		blk = fb2k::Block("\\(\\)");
-		CHECK_EQUAL(blk.getFormattedText(), "()");
+		CHECK_EQUAL("()", blk.getFormattedText());
 
 		blk = fb2k::Block("\\\\");
-		CHECK_EQUAL(blk.getFormattedText(), "\\");
+		CHECK_EQUAL("\\", blk.getFormattedText());
 
 		blk = fb2k::Block("\\,");
-		CHECK_EQUAL(blk.getFormattedText(), ",");
+		CHECK_EQUAL(",", blk.getFormattedText());
 
 		blk = fb2k::Block("\\t\\n");
-		CHECK_EQUAL(blk.getFormattedText(), "\t\n");
+		CHECK_EQUAL("\t\n", blk.getFormattedText());
 	}
 
 	TEST(BlockUnicodeParse)
 	{
 		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ)");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
-		CHECK_EQUAL(fn.size(), 1);
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 3);
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(1, fn.size());
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(3, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "♡");
-		CHECK_EQUAL(fn[0].args[1], "馬鹿");
-		CHECK_EQUAL(fn[0].args[2], "バカ");
+		CHECK_EQUAL("♡", fn[0].second[0].getStatement());
+		CHECK_EQUAL("馬鹿", fn[0].second[1].getStatement());
+		CHECK_EQUAL("バカ", fn[0].second[2].getStatement());
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0}");
+		CHECK_EQUAL("{0}", blk.getFormattedText());
 	}
 
 	TEST(BlockUnicodeParseExtra)
 	{
 		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ) 友");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
-		CHECK_EQUAL(fn.size(), 1);
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 3);
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(1, fn.size());
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(3, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "♡");
-		CHECK_EQUAL(fn[0].args[1], "馬鹿");
-		CHECK_EQUAL(fn[0].args[2], "バカ");
+		CHECK_EQUAL("♡", fn[0].second[0].getStatement());
+		CHECK_EQUAL("馬鹿", fn[0].second[1].getStatement());
+		CHECK_EQUAL("バカ", fn[0].second[2].getStatement());
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0} 友");
+		CHECK_EQUAL("{0} 友", blk.getFormattedText());
 	}
 
 	TEST(BlockParseInvaildName)
@@ -138,70 +138,70 @@ SUITE(BlockParsing)
 	TEST(BlockParseVariable)
 	{
 		fb2k::Block blk = fb2k::Block("%variable%");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
+		auto fn = blk.getFunctions();
 		std::vector<std::string> var = blk.getVariables();
-		CHECK_EQUAL(fn.size(), 0);
+		CHECK_EQUAL(0, fn.size());
 
-		CHECK_EQUAL(var.size(), 1);
+		CHECK_EQUAL(1, var.size());
 
-		CHECK_EQUAL(var[0], "variable");
+		CHECK_EQUAL("variable", var[0]);
 
-		CHECK_EQUAL(blk.getFormattedText(), "[0]");
+		CHECK_EQUAL("[0]", blk.getFormattedText());
 	}
 
 	TEST(BlockParseMultiVariable)
 	{
 		fb2k::Block blk = fb2k::Block("%v1% %v2% %v3%");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
+		auto fn = blk.getFunctions();
 		std::vector<std::string> var = blk.getVariables();
-		CHECK_EQUAL(fn.size(), 0);
+		CHECK_EQUAL(0, fn.size());
 
-		CHECK_EQUAL(var.size(), 3);
+		CHECK_EQUAL(3, var.size());
 
-		CHECK_EQUAL(var[0], "v1");
-		CHECK_EQUAL(var[1], "v2");
-		CHECK_EQUAL(var[2], "v3");
+		CHECK_EQUAL("v1", var[0]);
+		CHECK_EQUAL("v2", var[1]);
+		CHECK_EQUAL("v3", var[2]);
 
-		CHECK_EQUAL(blk.getFormattedText(), "[0] [1] [2]");
+		CHECK_EQUAL("[0] [1] [2]", blk.getFormattedText());
 	}
 
 	TEST(BlockParseVariableFunction)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,false) %var%");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
+		auto fn = blk.getFunctions();
 		std::vector<std::string> var = blk.getVariables();
-		CHECK_EQUAL(fn.size(), 1);
+		CHECK_EQUAL(1, fn.size());
 
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 2);
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(2, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "true");
-		CHECK_EQUAL(fn[0].args[1], "false");
+		CHECK_EQUAL("true", fn[0].second[0].getStatement());
+		CHECK_EQUAL("false", fn[0].second[1].getStatement());
 
-		CHECK_EQUAL(var.size(), 1);
+		CHECK_EQUAL(1, var.size());
 
-		CHECK_EQUAL(var[0], "var");
+		CHECK_EQUAL("var", var[0]);
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0} [0]");
+		CHECK_EQUAL("{0} [0]", blk.getFormattedText());
 	}
 
 	TEST(BlockParseAll)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,false) %var% \\$ text and 友");
-		std::vector<fb2k::Function> fn = blk.getFunctions();
+		auto fn = blk.getFunctions();
 		std::vector<std::string> var = blk.getVariables();
-		CHECK_EQUAL(fn.size(), 1);
+		CHECK_EQUAL(1, fn.size());
 
-		CHECK_EQUAL(fn[0].name, "if");
-		CHECK_EQUAL(fn[0].args.size(), 2);
+		CHECK_EQUAL("if", fn[0].first);
+		CHECK_EQUAL(2, fn[0].second.size());
 
-		CHECK_EQUAL(fn[0].args[0], "true");
-		CHECK_EQUAL(fn[0].args[1], "false");
+		CHECK_EQUAL("true", fn[0].second[0].getStatement());
+		CHECK_EQUAL("false", fn[0].second[1].getStatement());
 
-		CHECK_EQUAL(var.size(), 1);
+		CHECK_EQUAL(1, var.size());
 
-		CHECK_EQUAL(var[0], "var");
+		CHECK_EQUAL("var", var[0]);
 
-		CHECK_EQUAL(blk.getFormattedText(), "{0} [0] $ text and 友");
+		CHECK_EQUAL("{0} [0] $ text and 友", blk.getFormattedText());
 	}
 }

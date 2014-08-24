@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+
 #include "error.h"
 
 #define LIBFB2K_CMD_START '$'
@@ -21,13 +22,9 @@ namespace fb2k
 		bool success;
 	};
 
-	struct Function {
-		std::string name;
-		std::vector<std::string> args;
-	};
-
 	class Block {
 		public:
+			typedef std::pair<std::string,std::vector<Block>> Function;
 			Block();
 			Block(std::string statement);
 			virtual ~Block();
@@ -37,11 +34,12 @@ namespace fb2k
 
 			std::string getStatement();
 			std::string getFormattedText();
-			std::vector<fb2k::Function> getFunctions();
+			std::vector<Function> getFunctions();
 			std::vector<std::string> getVariables();
 
 			bool isParsed();
 		private:
+
 			std::vector<Block> children;
 			std::vector<Function> functions;
 			std::vector<std::string> variables;

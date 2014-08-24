@@ -5,6 +5,9 @@
 
 using namespace fb2k;
 
+// FIXME : THis does not see the typedef in the header, so it has to be made here
+typedef std::pair<std::string,std::vector<Block>> Function;
+
 /*
  * TODO : Add more characters that should be
  * escaped with a prepeneding : \
@@ -69,6 +72,7 @@ int Block::parse(std::string statement)
 
 	this->raw_statement = statement;
 	Function building;
+	std::string arg_building;
 	int args_index = 0;
 	int scope = 0;
 
@@ -81,41 +85,35 @@ int Block::parse(std::string statement)
 	char  last = ' ',  cur = ' ', next = *(statement.begin());
 	bool escaped = false;
 	auto itr = statement.begin();
-	for (int i = 0; i < statement.length(); i++ )
-	{
+	for(int i = 0; i < statement.length(); i++) {
 		escaped = false;
 		last = cur;
 		cur = next;
 		itr++;
-		next = ( itr == statement.end() ? ' ' : *itr );
+		next = (itr == statement.end() ? ' ' : *itr);
 
 		col++;
-		if (cur == '\n')
-		{
+		if(cur == '\n') {
 			row++;
 			col = 1;
 		}
 
 		// Skip null charaters
-		if (cur == '\0')
+		if(cur == '\0')
 			continue;
 
 		// Special Characters
-		if (cur == '\\')
-		{
+		if(cur == '\\') {
 			// TODO : refractor this to make it cleaner
-			for (int n = 0; n < to_escape.length(); n++)
-			{
-				if (next == to_escape[n])
-				{
+			for(int n = 0; n < to_escape.length(); n++) {
+				if(next == to_escape[n]) {
 					cur = to_escaped[n];
 					next = '\0';
 					escaped = true;
 					break;
 				}
 			}
-			if (!escaped)
-			{
+			if(!escaped) {
 				//Throw unkown escape character Error
 				std::stringstream ss;
 				ss << "Unkown escape character \\" << next << " at line:" << col << " row:" << row;
@@ -127,21 +125,17 @@ int Block::parse(std::string statement)
 		// TODO : add support for %var%, variables
 
 		// Start of function
-		if (cur == LIBFB2K_CMD_START && !escaped && state == READING)
-		{
+		if(cur == LIBFB2K_CMD_START && !escaped && state == READING) {
 			building = Function();
-			building.name = "";
-			building.args = std::vector<std::string>();
-			building.args.push_back("");
+			building.first = "";
+			arg_building = "";
+			building.second = std::vector<Block>();
 			state = FUNCTION_NAME;
-		} else if (cur == LIBFB2K_VAR_START && !escaped && state == READING)
-		{
+		} else if(cur == LIBFB2K_VAR_START && !escaped && state == READING) {
 			variables.push_back("");
 			state = VARIABLE_NAME;
-		} else if (state == VARIABLE_NAME)
-		{
-			if (cur == LIBFB2K_VAR_END)
-			{
+		} else if(state == VARIABLE_NAME) {
+			if(cur == LIBFB2K_VAR_END) {
 				// TODO : find a better way to represent a 'variable' in the parsed string
 				parsed << "[" << variables.size() - 1 << "]";
 				args_index++;
@@ -150,16 +144,13 @@ int Block::parse(std::string statement)
 				variables[variables.size() - 1] += cur;
 			}
 
-		} else if (state == FUNCTION_NAME)
-		{
-			if (cur == LIBFB2K_ARGS_START && !escaped)
-			{
+		} else if(state == FUNCTION_NAME) {
+			if(cur == LIBFB2K_ARGS_START && !escaped) {
 				state = FUNCTION_ARGS;
 				scope++;
 			} else {
-				if (isalnum(cur))
-				{
-					building.name += cur;
+				if(isalnum(cur)) {
+					building.first += cur;
 				} else {
 					std::stringstream ss;
 					// TODO : Should unicode function names be allowed?
@@ -167,62 +158,75 @@ int Block::parse(std::string statement)
 					throw fb2k::InvaildFuntionName(ss.str());
 				}
 			}
-		} else if (state == FUNCTION_ARGS)
-		{
-			if (cur == LIBFB2K_ARGS_START && !escaped)
-			{
+		} else if(state == FUNCTION_ARGS) {
+			if(cur == LIBFB2K_ARGS_START && !escaped) {
 				scope++;
-			} else if (cur == LIBFB2K_ARGS_END && !escaped)
-			{
+			} else if(cur == LIBFB2K_ARGS_END && !escaped) {
 				scope--;
-				if (scope == 0)
-				{
+				if(scope == 0) {
+					building.second.push_back(Block(arg_building));
+					arg_building = "";
+
 					this->functions.push_back(building);
 					parsed << "{" << functions.size() - 1 << "}";
 					state = READING;
 				}
 			}
-			if (scope == 1 && cur == ',' && !escaped)
-			{
-				building.args.push_back("");
+			if(scope == 1 && cur == ',' && !escaped) {
+				building.second.push_back(Block(arg_building));
+				arg_building = "";
+
 			} else {
-				building.args[building.args.size() - 1] += cur;
+				arg_building += cur;
 			}
 		} else {
 			// Add all the escape/normal text that is not in a function into the 'parsed' string
 			parsed << cur;
 		}
 #ifdef DEBUG_VERB
-	std::cout << "State : " << state << " Scope : " << scope  << " Last : " << last << " Current : " << cur << " Next : " << next << std::endl;
+		std::cout << "State : " << state << " Scope : " << scope  << " Last : " << last << " Current : " << cur << " Next : " << next << std::endl;
 #endif
 	}
 
 	// Post parse error checking
-	if (scope != 0)
+	if(scope != 0)
 		throw fb2k::SyntaxError("Mismatch of brackets");
 
-	if (state != READING)
+	if(state != READING)
 		throw fb2k::SyntaxError("State did not reslove");
 
 	this->parsed_statement = parsed.str();
 
 #ifdef DEBUG
 	std::cout << "Formated : " << parsed_statement << std::endl;
-	for (auto f : this->functions)
-	{
-		std::cout << "Function : " << f.name << std::endl;
-		for (auto arg : f.args)
-		{
-			std::cout << "\tArg : " << arg << std::endl;
+	int n = 0;
+	for(auto f : this->functions) {
+		std::cout << "Function " << n++ << " : " << f.first << std::endl;
+		for(auto arg : f.second) {
+			std::cout << "\tArg : " << arg.getStatement() << std::endl;
+		}
+	}
+	if (this->variables.size() != 0) {
+		n = 0;
+		std::cout << "Variables :" << std::endl;
+		for(auto var : this->variables) {
+			std::cout << "\t" << n++ << " : " << var << std::endl;
 		}
 	}
 
-	std::cout << "Variables :" << std::endl;
-	for (auto var : this->variables)
-	{
-		std::cout << "\t" << var << std::endl;
-	}
+
 #endif
 	this->parsed = true;
 	return 0;
 }
+
+BlockResult Block::eval()
+{
+	BlockResult result;
+
+	result.success = true;
+	result.result = this->raw_statement;
+
+	return result;
+}
+

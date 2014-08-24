@@ -4,8 +4,8 @@
 #include <string>
 #include <stdexcept>
 
-namespace fb2k {
-
+namespace fb2k
+{
 	class InvaildFuntionName : public std::runtime_error
 	{
 		public:
