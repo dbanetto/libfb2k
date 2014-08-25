@@ -8,13 +8,13 @@ SUITE(BlockParsing)
 	{
 		fb2k::Block blk = fb2k::Block("$if(true,then,false)");
 		auto fn = blk.getFunctions();
-		CHECK_EQUAL(1, fn.size());
-		CHECK_EQUAL("if" ,fn[0].first);
-		CHECK_EQUAL(3, fn[0].second.size());
+		CHECK_EQUAL(1, fn.size());	
+		CHECK_EQUAL("if" ,fn[0].name);
+		CHECK_EQUAL(fn[0].args.size(), 3);
 
-		CHECK_EQUAL("true", fn[0].second[0].getStatement());
-		CHECK_EQUAL("then", fn[0].second[1].getStatement());
-		CHECK_EQUAL("false", fn[0].second[2].getStatement());
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+		CHECK_EQUAL("then", fn[0].args[1].getStatement());
+		CHECK_EQUAL("false", fn[0].args[2].getStatement());
 
 		CHECK_EQUAL("{0}",blk.getFormattedText());
 	}
@@ -24,12 +24,12 @@ SUITE(BlockParsing)
 		fb2k::Block blk = fb2k::Block("$if(true,then,false) other text");
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(3, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(3, fn[0].args.size());
 
-		CHECK_EQUAL("true", fn[0].second[0].getStatement());
-		CHECK_EQUAL("then", fn[0].second[1].getStatement());
-		CHECK_EQUAL("false", fn[0].second[2].getStatement());
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+		CHECK_EQUAL("then", fn[0].args[1].getStatement());
+		CHECK_EQUAL("false", fn[0].args[2].getStatement());
 
 
 		CHECK_EQUAL("{0} other text", blk.getFormattedText());
@@ -41,19 +41,19 @@ SUITE(BlockParsing)
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(2, fn.size());
 
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(3, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(3, fn[0].args.size());
 
-		CHECK_EQUAL("true", fn[0].second[0].getStatement());
-		CHECK_EQUAL("then", fn[0].second[1].getStatement());
-		CHECK_EQUAL("false", fn[0].second[2].getStatement());
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+		CHECK_EQUAL("then", fn[0].args[1].getStatement());
+		CHECK_EQUAL("false", fn[0].args[2].getStatement());
 
-		CHECK_EQUAL("func", fn[1].first);
-		CHECK_EQUAL(3, fn[1].second.size());
+		CHECK_EQUAL("func", fn[1].name);
+		CHECK_EQUAL(3, fn[1].args.size());
 
-		CHECK_EQUAL("false", fn[1].second[0].getStatement());
-		CHECK_EQUAL("not", fn[1].second[1].getStatement());
-		CHECK_EQUAL("stuff", fn[1].second[2].getStatement());
+		CHECK_EQUAL("false", fn[1].args[0].getStatement());
+		CHECK_EQUAL("not", fn[1].args[1].getStatement());
+		CHECK_EQUAL("stuff", fn[1].args[2].getStatement());
 
 
 		CHECK_EQUAL("{0} {1}", blk.getFormattedText());
@@ -84,12 +84,12 @@ SUITE(BlockParsing)
 		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ)");
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(3, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(3, fn[0].args.size());
 
-		CHECK_EQUAL("♡", fn[0].second[0].getStatement());
-		CHECK_EQUAL("馬鹿", fn[0].second[1].getStatement());
-		CHECK_EQUAL("バカ", fn[0].second[2].getStatement());
+		CHECK_EQUAL("♡", fn[0].args[0].getStatement());
+		CHECK_EQUAL("馬鹿", fn[0].args[1].getStatement());
+		CHECK_EQUAL("バカ", fn[0].args[2].getStatement());
 
 		CHECK_EQUAL("{0}", blk.getFormattedText());
 	}
@@ -99,12 +99,12 @@ SUITE(BlockParsing)
 		fb2k::Block blk = fb2k::Block("$if(♡,馬鹿,バカ) 友");
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(3, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(3, fn[0].args.size());
 
-		CHECK_EQUAL("♡", fn[0].second[0].getStatement());
-		CHECK_EQUAL("馬鹿", fn[0].second[1].getStatement());
-		CHECK_EQUAL("バカ", fn[0].second[2].getStatement());
+		CHECK_EQUAL("♡", fn[0].args[0].getStatement());
+		CHECK_EQUAL("馬鹿", fn[0].args[1].getStatement());
+		CHECK_EQUAL("バカ", fn[0].args[2].getStatement());
 
 		CHECK_EQUAL("{0} 友", blk.getFormattedText());
 	}
@@ -172,11 +172,11 @@ SUITE(BlockParsing)
 		std::vector<std::string> var = blk.getVariables();
 		CHECK_EQUAL(1, fn.size());
 
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(2, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(2, fn[0].args.size());
 
-		CHECK_EQUAL("true", fn[0].second[0].getStatement());
-		CHECK_EQUAL("false", fn[0].second[1].getStatement());
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+		CHECK_EQUAL("false", fn[0].args[1].getStatement());
 
 		CHECK_EQUAL(1, var.size());
 
@@ -192,11 +192,11 @@ SUITE(BlockParsing)
 		std::vector<std::string> var = blk.getVariables();
 		CHECK_EQUAL(1, fn.size());
 
-		CHECK_EQUAL("if", fn[0].first);
-		CHECK_EQUAL(2, fn[0].second.size());
+		CHECK_EQUAL("if", fn[0].name);
+		CHECK_EQUAL(2, fn[0].args.size());
 
-		CHECK_EQUAL("true", fn[0].second[0].getStatement());
-		CHECK_EQUAL("false", fn[0].second[1].getStatement());
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+		CHECK_EQUAL("false", fn[0].args[1].getStatement());
 
 		CHECK_EQUAL(1, var.size());
 

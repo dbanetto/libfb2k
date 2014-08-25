@@ -5,9 +5,6 @@
 
 using namespace fb2k;
 
-// FIXME : THis does not see the typedef in the header, so it has to be made here
-typedef std::pair<std::string,std::vector<Block>> Function;
-
 /*
  * TODO : Add more characters that should be
  * escaped with a prepeneding : \
@@ -44,7 +41,7 @@ std::string Block::getStatement()
 	return this->raw_statement;
 }
 
-std::vector<Function> Block::getFunctions()
+std::vector<Block::Function> Block::getFunctions()
 {
 	return functions;
 }
@@ -127,9 +124,9 @@ int Block::parse(std::string statement)
 		// Start of function
 		if(cur == LIBFB2K_CMD_START && !escaped && state == READING) {
 			building = Function();
-			building.first = "";
+			building.name = "";
 			arg_building = "";
-			building.second = std::vector<Block>();
+			building.args = std::vector<Block>();
 			state = FUNCTION_NAME;
 		} else if(cur == LIBFB2K_VAR_START && !escaped && state == READING) {
 			variables.push_back("");
@@ -150,7 +147,7 @@ int Block::parse(std::string statement)
 				scope++;
 			} else {
 				if(isalnum(cur)) {
-					building.first += cur;
+					building.name += cur;
 				} else {
 					std::stringstream ss;
 					// TODO : Should unicode function names be allowed?
@@ -164,7 +161,7 @@ int Block::parse(std::string statement)
 			} else if(cur == LIBFB2K_ARGS_END && !escaped) {
 				scope--;
 				if(scope == 0) {
-					building.second.push_back(Block(arg_building));
+					building.args.push_back(Block(arg_building));
 					arg_building = "";
 
 					this->functions.push_back(building);
@@ -173,7 +170,7 @@ int Block::parse(std::string statement)
 				}
 			}
 			if(scope == 1 && cur == ',' && !escaped) {
-				building.second.push_back(Block(arg_building));
+				building.args.push_back(Block(arg_building));
 				arg_building = "";
 
 			} else {
@@ -201,8 +198,8 @@ int Block::parse(std::string statement)
 	std::cout << "Formated : " << parsed_statement << std::endl;
 	int n = 0;
 	for(auto f : this->functions) {
-		std::cout << "Function " << n++ << " : " << f.first << std::endl;
-		for(auto arg : f.second) {
+		std::cout << "Function " << n++ << " : " << f.name << std::endl;
+		for(auto arg : f.args) {
 			std::cout << "\tArg : " << arg.getStatement() << std::endl;
 		}
 	}

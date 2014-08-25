@@ -24,7 +24,10 @@ namespace fb2k
 
 	class Block {
 		public:
-			typedef std::pair<std::string,std::vector<Block>> Function;
+			struct Function {
+				std::string name;
+				std::vector<Block> args;
+			};
 			Block();
 			Block(std::string statement);
 			virtual ~Block();
@@ -39,8 +42,6 @@ namespace fb2k
 
 			bool isParsed();
 		private:
-
-			std::vector<Block> children;
 			std::vector<Function> functions;
 			std::vector<std::string> variables;
 
