@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+#include <taglib/taglib.h>
+#include <taglib/tpropertymap.h>
+#include <taglib/tstringlist.h>
+
 
 #include "error.h"
 
@@ -20,30 +24,44 @@ namespace fb2k
 	struct BlockResult {
 		std::string result;
 		bool success;
+
+		BlockResult() {
+			this->result = "";
+			success = false;
+		}
 	};
 
-	class Block {
+	class Block
+	{
 		public:
 			struct Function {
 				std::string name;
 				std::vector<Block> args;
+				unsigned int pos;
+				unsigned int raw_pos;
 			};
+			struct Variable {
+				std::string name;
+				unsigned int pos;
+				unsigned int raw_pos;
+			};
+
 			Block();
 			Block(std::string statement);
 			virtual ~Block();
 
 			int parse(std::string statement);
-			BlockResult eval();
+			BlockResult eval(TagLib::PropertyMap metadata);
 
 			std::string getStatement();
 			std::string getFormattedText();
 			std::vector<Function> getFunctions();
-			std::vector<std::string> getVariables();
+			std::vector<Variable> getVariables();
 
 			bool isParsed();
 		private:
 			std::vector<Function> functions;
-			std::vector<std::string> variables;
+			std::vector<Variable> variables;
 
 			std::string raw_statement;
 			std::string parsed_statement;
