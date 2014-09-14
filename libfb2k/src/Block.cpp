@@ -256,6 +256,7 @@ BlockResult Block::eval(TagLib::PropertyMap metadata)
 		if(eval_var) {
 			if(metadata.contains((*var_itr).name)) {
 				// insert at the index of the variable
+				// TODO : alias some names, e.g. tacknumber -> track
 				std::string meta = metadata[(*var_itr).name].toString().toCString(false);
 				result.result.insert((*var_itr).pos + offset, meta);
 				offset += meta.length();

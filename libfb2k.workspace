@@ -3,19 +3,22 @@
   <Project Name="tf2k" Path="tf2k/tf2k.project" Active="Yes"/>
   <Project Name="libfb2kTest" Path="libfb2kTest/libfb2kTest.project" Active="No"/>
   <Project Name="libfb2k" Path="libfb2k/libfb2k.project"/>
+  <Environment>
+    <![CDATA[LD_LIBRARY_PATH=.]]>
+  </Environment>
+  <Project Name="tf2kTest" Path="tf2kTest/tf2kTest.project"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="tf2k" ConfigName="Debug"/>
       <Project Name="libfb2kTest" ConfigName="Debug"/>
       <Project Name="libfb2k" ConfigName="Debug"/>
+      <Project Name="tf2kTest" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="tf2k" ConfigName="Release"/>
       <Project Name="libfb2kTest" ConfigName="Release"/>
       <Project Name="libfb2k" ConfigName="Release"/>
+      <Project Name="tf2kTest" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Environment>
-    <![CDATA[LD_LIBRARY_PATH=.]]>
-  </Environment>
 </CodeLite_Workspace>

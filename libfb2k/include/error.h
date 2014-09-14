@@ -6,18 +6,25 @@
 
 namespace fb2k
 {
-	class InvaildFuntionName : public std::runtime_error
+	class FB2KError  : public std::runtime_error
 	{
 		public:
-			InvaildFuntionName(const std::string& msg)
+			FB2KError(const std::string& msg)
 				: std::runtime_error(msg) {};
 	};
 
-	class SyntaxError : public std::runtime_error
+	class InvaildFuntionName : public FB2KError
+	{
+		public:
+			InvaildFuntionName(const std::string& msg)
+				: FB2KError(msg) {};
+	};
+
+	class SyntaxError : public FB2KError
 	{
 		public:
 			SyntaxError(const std::string& msg)
-				: std::runtime_error(msg) {};
+				: FB2KError(msg) {};
 	};
 };
 #endif // LIBFB2K_ERROR_H
