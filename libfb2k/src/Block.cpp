@@ -3,7 +3,7 @@
 #include <sstream>
 #include <ctype.h>
 #include <algorithm>
-#include "FuncMap.h"
+#include "libfb2k/FuncMap.h"
 
 
 using namespace fb2k;

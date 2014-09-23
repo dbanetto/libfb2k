@@ -1,4 +1,4 @@
-#include <UnitTest++.h>
+#include <unittest++/UnitTest++.h>
 #include "libfb2k/libfb2k.h"
 #include "libfb2k/Block.h"
 
@@ -284,7 +284,7 @@ SUITE(BlockEval)
 
 	TEST(BlockFuncVarEvalCloseCase) {
 		fb2k::Block blk = fb2k::Block("$if(%artist%,true,false)%artist%");
-		
+
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");

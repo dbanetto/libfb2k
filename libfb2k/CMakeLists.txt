@@ -1,25 +1,46 @@
-cmake_minimum_required(VERSION 2.6.2)
+cmake_minimum_required(VERSION 3.0)
 
-project(libfb2k)
+project(fb2k)
 
-include_directories(
-    .
-    .
-    /home/drb/Documents/Project/cpp/libfb2k/libfb2k/
-    /home/drb/Documents/Project/cpp/libfb2k/libfb2k/
-)
+# CMake modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
 
-set(CMAKE_CXXFLAGS "${CMAKE_CXXFLAGS}  -g")
+# Match build folder structure to src
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-# Linker options
-set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS}  ")
+# Find Libraries
+find_package(tag REQUIRED)
 
-# Library path
-set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L\".\" ")
+# Add global definitions
+add_definitions("-Wall")
+add_definitions("-std=c++11")
 
-set(SRCS
-    include/libfb2k.h
-)
+include_directories(${TAG_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_library(libfb2k SHARED ${SRCS})
+add_library(fb2k SHARED src/Block.cpp src/FuncMap.cpp)
 
+target_link_libraries(fb2k ${TAG_LIBRARIES})
+
+# Test Suite
+find_package(UnitTest++ QUIET)
+if (UNITTEST++_FOUND)
+	enable_testing()
+
+	add_executable(fb2kTest
+		tests/runner.cpp
+		tests/BlockTest.cpp
+		tests/FunctionTest.cpp
+	)
+
+	include_directories(${UNITTEST++_INCLUDE_DIR})
+	include_directories(${TAG_INCLUDE_DIR})
+	include_directories(${PROJECT_SOURCE_DIR}/include)
+
+	target_link_libraries(fb2kTest ${LIBRARY_OUTPUT_PATH}/libfb2k.so)
+	target_link_libraries(fb2kTest ${TAG_LIBRARIES})
+	target_link_libraries(fb2kTest ${UNITTEST++_LIBRARY})
+
+	add_test(fb2kTest fb2kTest)
+endif()

@@ -38,3 +38,11 @@ install_manifest.txt
 .build-debug
 Debug/
 Release/
+
+### CMake ###
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+build
