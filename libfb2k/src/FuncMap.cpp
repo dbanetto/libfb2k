@@ -2,33 +2,56 @@
 
 using namespace fb2k;
 
-FuncMap::FuncMap()
-{
-	// Basic Conditionals
-	this->insert(FuncPair("if",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
-
-		if(args[0].eval(data).success)
-			return args[1].eval(data);
-		else
-			return (args.size() == 3 ? args[2].eval(data) : BlockResult());
-
+FuncMap::FuncMap() {
+	
+	// TODO : assert argument sizes: fixed, greater than, less than
+	
+	//Implicit if
+	this->insert(FuncPair("[",
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
+		auto result = args[0].eval(data);
+		if (result.success) {
+			// TRUE
+			return result;
+		} else {
+			//FALSE
+			return BlockResult();
+		}
 	}));
 
-	this->insert(FuncPair("if3",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
+	// Basic Conditionals
+	this->insert(FuncPair("if",
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
 
-		if(args[0].eval(data).success)
+		if (args[0].eval(data).success) {
+			//TRUE
 			return args[1].eval(data);
-		else
+		} else {
+			//FALSE
+			return (args.size() == 3 ? args[2].eval(data) : BlockResult());
+		}
+
+	}));
+	
+	// if with guaranteed 3 arguments
+	this->insert(FuncPair("if3",
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
+
+		if (args[0].eval(data).success) {
+			// TRUE
+			return args[1].eval(data);
+		} else {
+			// FALSE
 			return args[2].eval(data);
+		}
 
 	}));
 
 	// Logical Operators
-	// NOTE :  Logical Operators DO NOT return result strings
+	// NOTE :  Logical Operators DO NOT return result strings, just a boolean
+	// TODO: add implies, equals and equivalent
 	this->insert(FuncPair("not",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
 
 		BlockResult rs;
 		rs.success = (!args[0].eval(data).success);
@@ -37,7 +60,7 @@ FuncMap::FuncMap()
 	}));
 
 	this->insert(FuncPair("or",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
 
 		BlockResult rs;
 		rs.success = args[0].eval(data).success | args[1].eval(data).success;
@@ -46,7 +69,7 @@ FuncMap::FuncMap()
 	}));
 
 	this->insert(FuncPair("xor",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
 
 		BlockResult rs;
 		rs.success = args[0].eval(data).success ^ args[1].eval(data).success;
@@ -55,7 +78,7 @@ FuncMap::FuncMap()
 	}));
 
 	this->insert(FuncPair("and",
-	[](TagLib::PropertyMap data ,std::vector<Block> args) {
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
 
 		BlockResult rs;
 		rs.success = args[0].eval(data).success & args[1].eval(data).success;
@@ -64,7 +87,6 @@ FuncMap::FuncMap()
 	}));
 }
 
-FuncMap::~FuncMap()
-{
+FuncMap::~FuncMap() {
 
 }

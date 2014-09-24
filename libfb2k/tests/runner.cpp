@@ -3,7 +3,6 @@
 #include "libfb2k/Block.h"
 
 // run all tests
-int main(int argc, char **argv)
-{
+int main(int argc, char** argv) {
 	return UnitTest::RunAllTests();
 }

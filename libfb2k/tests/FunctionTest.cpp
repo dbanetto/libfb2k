@@ -2,15 +2,15 @@
 #include "libfb2k/libfb2k.h"
 #include "libfb2k/Block.h"
 
-SUITE(LogicalFunctions)
-{
+SUITE(LogicalFunctions) {
+
 	TEST(IF) {
 		fb2k::Block blk = fb2k::Block("$if(%artist%,true,false)");
 
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		auto result = blk.eval(metadata);
 		CHECK_EQUAL("true", result.result);
@@ -32,13 +32,36 @@ SUITE(LogicalFunctions)
 		CHECK_EQUAL(false, result.success);
 	}
 
+	TEST(IMPLICT_IF) {
+		fb2k::Block blk = fb2k::Block("[%artist%]");
+
+		TagLib::PropertyMap metadata;
+		TagLib::StringList ls;
+		ls.append("Foobar");
+		metadata.insert("artist", ls);
+
+		auto result = blk.eval(metadata);
+		CHECK_EQUAL("Foobar", result.result);
+		CHECK_EQUAL(true, result.success);
+
+		blk = fb2k::Block("[artist]");
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		blk = fb2k::Block("[artist %artist%]");
+		result = blk.eval(metadata);
+		CHECK_EQUAL("artist Foobar", result.result);
+		CHECK_EQUAL(true, result.success);
+	}
+
 	TEST(NOT) {
 		fb2k::Block blk = fb2k::Block("$not(%artist%)");
 
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		auto result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
@@ -66,13 +89,13 @@ SUITE(LogicalFunctions)
 
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(true, result.success);
 
-		metadata.insert("album",ls);
+		metadata.insert("album", ls);
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(true, result.success);
@@ -95,13 +118,13 @@ SUITE(LogicalFunctions)
 
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(true, result.success);
 
-		metadata.insert("album",ls);
+		metadata.insert("album", ls);
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(false, result.success);
@@ -123,13 +146,13 @@ SUITE(LogicalFunctions)
 
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(false, result.success);
 
-		metadata.insert("album",ls);
+		metadata.insert("album", ls);
 		result = blk.eval(metadata);
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(true, result.success);

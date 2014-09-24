@@ -19,6 +19,9 @@
 #define LIBFB2K_VAR_START '%'
 #define LIBFB2K_VAR_END '%'
 
+#define LIBFB2K_IMPLICIT_IF_START '['
+#define LIBFB2K_IMPLICIT_IF_END ']'
+
 namespace fb2k
 {
 	struct BlockResult {

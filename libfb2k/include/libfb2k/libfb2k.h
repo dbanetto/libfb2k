@@ -8,4 +8,8 @@
 #define LIBFB2K_VERSION_MINOR 0
 #define LIBFB2K_VERSION_PATH  1
 
+#include "Block.h"
+#include "error.h"
+#include "FuncMap.h"
+
 #endif

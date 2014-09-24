@@ -20,8 +20,9 @@ namespace fb2k
 			FuncMap();
 			virtual ~FuncMap();
 
-	} static FunctionMap;
-
+	};
+	// FIXME : Should this be a static global?
+	static FuncMap FunctionMap;
 }
 
 #endif // FUNCMAP_H

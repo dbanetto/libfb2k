@@ -2,15 +2,14 @@
 #include "libfb2k/libfb2k.h"
 #include "libfb2k/Block.h"
 
-SUITE(BlockParsing)
-{
+SUITE(BlockParsing) {
 	TEST(BlockParse) {
 		fb2k::Block blk = fb2k::Block("$if(true,then,else)");
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
-		CHECK_EQUAL("if" ,fn[0].name);
-		CHECK_EQUAL(0 ,fn[0].pos);
-		CHECK_EQUAL(0 ,fn[0].raw_pos);
+		CHECK_EQUAL("if" , fn[0].name);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
 
 		CHECK_EQUAL(fn[0].args.size(), 3);
 
@@ -18,7 +17,7 @@ SUITE(BlockParsing)
 		CHECK_EQUAL("then", fn[0].args[1].getStatement());
 		CHECK_EQUAL("else", fn[0].args[2].getStatement());
 
-		CHECK_EQUAL("",blk.getFormattedText());
+		CHECK_EQUAL("", blk.getFormattedText());
 	}
 
 	TEST(BlockParseExtra) {
@@ -26,8 +25,8 @@ SUITE(BlockParsing)
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
 		CHECK_EQUAL("if", fn[0].name);
-		CHECK_EQUAL(0 ,fn[0].pos);
-		CHECK_EQUAL(0 ,fn[0].raw_pos);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
 
 		CHECK_EQUAL(3, fn[0].args.size());
 
@@ -46,8 +45,8 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL("if", fn[0].name);
 		CHECK_EQUAL(3, fn[0].args.size());
-		CHECK_EQUAL(0 ,fn[0].pos);
-		CHECK_EQUAL(0 ,fn[0].raw_pos);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
 
 		CHECK_EQUAL("true", fn[0].args[0].getStatement());
 		CHECK_EQUAL("then", fn[0].args[1].getStatement());
@@ -55,8 +54,8 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL("func", fn[1].name);
 		CHECK_EQUAL(3, fn[1].args.size());
-		CHECK_EQUAL(1 ,fn[1].pos);
-		CHECK_EQUAL(20 ,fn[1].raw_pos);
+		CHECK_EQUAL(1 , fn[1].pos);
+		CHECK_EQUAL(20 , fn[1].raw_pos);
 
 		CHECK_EQUAL("false", fn[1].args[0].getStatement());
 		CHECK_EQUAL("not", fn[1].args[1].getStatement());
@@ -71,8 +70,8 @@ SUITE(BlockParsing)
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
 		CHECK_EQUAL("if", fn[0].name);
-		CHECK_EQUAL(0 ,fn[0].pos);
-		CHECK_EQUAL(0 ,fn[0].raw_pos);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
 
 		CHECK_EQUAL(3, fn[0].args.size());
 
@@ -88,8 +87,8 @@ SUITE(BlockParsing)
 		auto fn = blk.getFunctions();
 		CHECK_EQUAL(1, fn.size());
 		CHECK_EQUAL("if", fn[0].name);
-		CHECK_EQUAL(0 ,fn[0].pos);
-		CHECK_EQUAL(0 ,fn[0].raw_pos);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
 
 		CHECK_EQUAL(3, fn[0].args.size());
 
@@ -100,6 +99,20 @@ SUITE(BlockParsing)
 		CHECK_EQUAL(" 友", blk.getFormattedText());
 	}
 
+	TEST(BlockParseImplicIf) {
+		fb2k::Block blk = fb2k::Block("[true]");
+		auto fn = blk.getFunctions();
+		CHECK_EQUAL(1, fn.size());
+		CHECK_EQUAL("[" , fn[0].name);
+		CHECK_EQUAL(0 , fn[0].pos);
+		CHECK_EQUAL(0 , fn[0].raw_pos);
+
+		CHECK_EQUAL(fn[0].args.size(), 1);
+
+		CHECK_EQUAL("true", fn[0].args[0].getStatement());
+
+		CHECK_EQUAL("", blk.getFormattedText());
+	}
 
 	TEST(BlockParseVariable) {
 		fb2k::Block blk = fb2k::Block("%variable%");
@@ -111,7 +124,7 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL("variable", var[0].name);
 		CHECK_EQUAL(0, var[0].pos);
-		CHECK_EQUAL(0 ,var[0].raw_pos);
+		CHECK_EQUAL(0 , var[0].raw_pos);
 
 		CHECK_EQUAL("", blk.getFormattedText());
 	}
@@ -126,15 +139,15 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL("v1", var[0].name);
 		CHECK_EQUAL(0, var[0].pos);
-		CHECK_EQUAL(0 ,var[0].raw_pos);
+		CHECK_EQUAL(0 , var[0].raw_pos);
 
 		CHECK_EQUAL("v2", var[1].name);
 		CHECK_EQUAL(1, var[1].pos);
-		CHECK_EQUAL(5 ,var[1].raw_pos);
+		CHECK_EQUAL(5 , var[1].raw_pos);
 
 		CHECK_EQUAL("v3", var[2].name);
 		CHECK_EQUAL(2, var[2].pos);
-		CHECK_EQUAL(10 ,var[2].raw_pos);
+		CHECK_EQUAL(10 , var[2].raw_pos);
 
 		CHECK_EQUAL("  ", blk.getFormattedText());
 	}
@@ -148,7 +161,7 @@ SUITE(BlockParsing)
 		CHECK_EQUAL("if", fn[0].name);
 		CHECK_EQUAL(2, fn[0].args.size());
 		CHECK_EQUAL(0, fn[0].pos);
-		CHECK_EQUAL(0,fn[0].raw_pos);
+		CHECK_EQUAL(0, fn[0].raw_pos);
 
 		CHECK_EQUAL("true", fn[0].args[0].getStatement());
 		CHECK_EQUAL("false", fn[0].args[1].getStatement());
@@ -157,7 +170,7 @@ SUITE(BlockParsing)
 
 		CHECK_EQUAL("var", var[0].name);
 		CHECK_EQUAL(1, var[0].pos);
-		CHECK_EQUAL(16 ,var[0].raw_pos);
+		CHECK_EQUAL(16 , var[0].raw_pos);
 
 		CHECK_EQUAL(" ", blk.getFormattedText());
 	}
@@ -204,8 +217,7 @@ SUITE(BlockParsing)
 
 }
 
-SUITE(BlockErrorDetection)
-{
+SUITE(BlockErrorDetection) {
 	TEST(BlockParseInvaildName) {
 		CHECK_THROW(fb2k::Block("$f a i l m e ()") , fb2k::InvaildFuntionName);
 		CHECK_THROW(fb2k::Block("$友()") , fb2k::InvaildFuntionName);
@@ -229,15 +241,14 @@ SUITE(BlockErrorDetection)
 	}
 }
 
-SUITE(BlockEval)
-{
+SUITE(BlockEval) {
 	TEST(BlockVarEval) {
 		fb2k::Block blk = fb2k::Block("%artist%");
 
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 		CHECK_EQUAL("Foobar", blk.eval(metadata).result);
 	}
 
@@ -247,7 +258,7 @@ SUITE(BlockEval)
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("友");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 		CHECK_EQUAL("友", blk.eval(metadata).result);
 	}
 
@@ -257,7 +268,7 @@ SUITE(BlockEval)
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("FOOBAR");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 		CHECK_EQUAL("FOOBAR FOOBAR FOOBAR", blk.eval(metadata).result);
 	}
 	TEST(BlockFuncEvalUnicode) {
@@ -266,7 +277,7 @@ SUITE(BlockEval)
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		CHECK_EQUAL("友", blk.eval(metadata).result);
 	}
@@ -277,7 +288,7 @@ SUITE(BlockEval)
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		CHECK_EQUAL("true", blk.eval(metadata).result);
 	}
@@ -288,7 +299,7 @@ SUITE(BlockEval)
 		TagLib::PropertyMap metadata;
 		TagLib::StringList ls;
 		ls.append("Foobar");
-		metadata.insert("artist",ls);
+		metadata.insert("artist", ls);
 
 		CHECK_EQUAL("trueFoobar", blk.eval(metadata).result);
 	}
