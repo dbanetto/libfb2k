@@ -1,11 +1,9 @@
-TODO List
-=========
+# TODO List
 
-Field remappings
-----------------
+## Field remappings
 
-Metadata
---------
+### Metadata
+
 - [ ] %album artist%
 - [x] %album%
 - [x] %artist%
@@ -15,8 +13,7 @@ Metadata
 - [x] %tracknumber%
 - [ ] %track number%
 
-Technical information
----------------------
+### Technical information
 
 - [ ] %bitrate%
 - [ ] %channels%
@@ -27,10 +24,9 @@ Technical information
 
 - [ ] Special fields
 
-Control flow
-------------
+### Control flow
 
-- [x] [...] (conditional section)
+- [x] [...] conditional section
 - [x] $if(cond,then)
 - [x] $if(cond,then,else)
 - [ ] $if2(a,else)
@@ -40,8 +36,7 @@ Control flow
 - [ ] $iflonger(s,n,then,else)
 - [ ] $select(n,a1,...,aN)
 
-Arithmetic functions
---------------------
+## Arithmetic functions
 
 - [ ] $add(a,b)
 - [ ] $div(a,b)
@@ -54,16 +49,14 @@ Arithmetic functions
 - [ ] $rand()
 - [ ] $sub(a,b)
 
-Boolean functions
------------------
+## Boolean functions
 
 - [ ] $and(...)
 - [ ] $or(...)
 - [x] $not(x)
 - [ ] $xor(...)
 
-String functions
-----------------
+## String functions
 
 - [ ]  $abbr(x)
 - [ ]  $abbr(x,len)
