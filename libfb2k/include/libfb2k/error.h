@@ -26,5 +26,12 @@ namespace fb2k
 			SyntaxError(const std::string& msg)
 				: FB2KError(msg) {};
 	};
+	
+	class InvalidNumberOfArugments : public FB2KError
+	{
+		public:
+			InvalidNumberOfArugments(const std::string& msg)
+				: FB2KError(msg) {};
+	};
 };
 #endif // LIBFB2K_ERROR_H

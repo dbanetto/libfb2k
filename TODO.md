@@ -1,5 +1,10 @@
 # TODO List
 
+The function or variable is checked once it compiles with the [Foobar2000 Format
+Syntax](http://wiki.hydrogenaud.io/index.php?title=Foobar2000:Title_Formatting_Reference)
+
+This is only a basic list of
+
 ## Field remappings
 
 ### Metadata
@@ -24,7 +29,7 @@
 
 - [ ] Special fields
 
-### Control flow
+## Control flow
 
 - [x] [...] conditional section
 - [x] $if(cond,then)
@@ -51,8 +56,8 @@
 
 ## Boolean functions
 
-- [ ] $and(...)
-- [ ] $or(...)
+- [x] $and(...)
+- [x] $or(...)
 - [x] $not(x)
 - [ ] $xor(...)
 
@@ -113,4 +118,41 @@
 - [ ]  $tab()
 - [ ]  $tab(n)
 - [ ]  $upper(s)
+
+## Track info
+
+###  Metadata
+- [ ]  $meta(name)
+- [ ]  $meta(name,n)
+- [ ]  $meta_sep(name,sep)
+- [ ]  $meta_sep(name,sep,lastsep)
+- [ ]  $meta_test(...)
+- [ ]  $meta_num(name)
+
+###  Technical information
+- [ ]  $info(name)
+- [ ]  $channels()
+- [ ]  %replaygain_album_gain%
+- [ ]  %replaygain_album_peak%
+- [ ]  %replaygain_track_gain%
+- [ ]  %replaygain_track_peak%
+
+###  Special fields
+
+- [ ]  %filename%
+- [ ]  %filename_ext%
+- [ ]  %directoryname%
+- [ ]  %last_modified%
+- [ ]  %path%
+- [ ]  %_path_raw%
+- [ ]  %subsong%
+- [ ]  %_foobar2000_version%
+
+## Time/Date Functions
+
+- [ ] $year(time)
+- [ ] $month(time)
+- [ ] $day_of_month(time)
+- [ ] $date(time)
+- [ ] $time(time)
 

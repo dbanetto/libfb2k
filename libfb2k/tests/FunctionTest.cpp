@@ -162,5 +162,66 @@ SUITE(LogicalFunctions) {
 		CHECK_EQUAL("", result.result);
 		CHECK_EQUAL(false, result.success);
 	}
+	
+	TEST(MULTI_AND) {
+		fb2k::Block blk = fb2k::Block("$and(%artist%,%album%,%title%)");
+
+		TagLib::PropertyMap metadata;
+
+		auto result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		TagLib::StringList ls;
+		ls.append("Foobar");
+		metadata.insert("artist", ls);
+
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		metadata.insert("album", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		metadata.insert("title", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+	}
+	
+	TEST(MULTI_OR) {
+		fb2k::Block blk = fb2k::Block("$or(%artist%,%album%,%title%)");
+
+		TagLib::PropertyMap metadata;
+
+		auto result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		TagLib::StringList ls;
+		
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+		
+		ls.append("Foobar");
+		metadata.insert("artist", ls);
+
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+
+		metadata.insert("album", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+
+		metadata.insert("title", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+	}
 
 }
