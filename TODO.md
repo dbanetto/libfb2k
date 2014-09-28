@@ -3,7 +3,7 @@
 The function or variable is checked once it compiles with the [Foobar2000 Format
 Syntax](http://wiki.hydrogenaud.io/index.php?title=Foobar2000:Title_Formatting_Reference)
 
-This is only a basic list of
+This is only a basic list of core functions and variables
 
 ## Field remappings
 
