@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-#include <taglib/taglib.h>
-#include <taglib/tpropertymap.h>
-#include <taglib/tstringlist.h>
+#include <taglib.h>
+#include <tpropertymap.h>
+#include <tstringlist.h>
 
 
 #include "error.h"

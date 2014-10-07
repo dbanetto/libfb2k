@@ -4,9 +4,9 @@ find_package(PkgConfig)
 pkg_check_modules(UNITTEST++ QUIET unittest++)
 set(UNITTEST++_DEFINITIONS ${UNITTEST++_CFLAGS_OTHER})
 
-find_path(UNITTEST++_INCLUDE_DIR unittest++/UnitTest++.h
-          HINTS ${UNITTEST++_INCLUDEDIR} ${UNITTEST++_INCLUDE_DIRS}
-          PATH_SUFFIXES unittest++ )
+find_path(UNITTEST++_INCLUDE_DIR UnitTest++.h
+          HINTS ${UNITTEST++_INCLUDEDIR} ${UNITTEST++_INCLUDE_DIRS})
+
 
 find_library(UNITTEST++_LIBRARY NAMES unittest++
              HINTS ${UNITTEST++_LIBDIR} ${UNITTEST++_LIBRARY_DIRS} )

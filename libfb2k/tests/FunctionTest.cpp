@@ -1,4 +1,4 @@
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 #include "libfb2k/libfb2k.h"
 #include "libfb2k/Block.h"
 

@@ -42,7 +42,7 @@ if (UNITTEST++_FOUND)
 	include_directories(${TAG_INCLUDE_DIR})
 	include_directories(${PROJECT_SOURCE_DIR}/include)
 
-	target_link_libraries(fb2kTest ${CMAKE_CURRENT_BINARY_DIR}/libfb2k.so)
+	target_link_libraries(fb2kTest ${LIBRARY_OUTPUT_PATH}/libfb2k.so)
 	target_link_libraries(fb2kTest ${TAG_LIBRARIES})
 	target_link_libraries(fb2kTest ${UNITTEST++_LIBRARY})
 
