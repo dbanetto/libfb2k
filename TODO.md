@@ -34,8 +34,8 @@ This is only a basic list of core functions and variables
 - [x] [...] conditional section
 - [x] $if(cond,then)
 - [x] $if(cond,then,else)
-- [ ] $if2(a,else)
-- [ ] $if3(a1,a2,...,aN,else)
+- [x] $if2(a,else)
+- [x] $if3(a1,a2,...,aN,else)
 - [ ] $ifequal(n1,n2,then,else)
 - [ ] $ifgreater(n1,n2,then,else)
 - [ ] $iflonger(s,n,then,else)

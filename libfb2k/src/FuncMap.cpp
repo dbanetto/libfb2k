@@ -4,11 +4,11 @@
 using namespace fb2k;
 
 FuncMap::FuncMap() {
-	
+
 	// TODO : assert argument sizes: fixed, greater than, less than
 	// FIXME: should argument length be verified on parse? So have all errors in parse time, not run-time
 	// TODO : Allow for easy addition of additional function blocks, e.g. "Colour functions"
-	
+
 	//Implicit if
 	this->insert(FuncPair("[",
 	[](TagLib::PropertyMap data , std::vector<Block> args) {
@@ -35,19 +35,42 @@ FuncMap::FuncMap() {
 		}
 
 	}));
+
+		this->insert(FuncPair("if2",
+	[](TagLib::PropertyMap data , std::vector<Block> args) {
+		// FIXME : This should not be processed here
+		if (args.size() != 2) {
+			throw InvalidNumberOfArugments("Expected 2 arguments");
+		}
+		
+		auto result = args[0].eval(data);
+		if (result.success) {
+			//TRUE
+			return result;
+		} else {
+			//FALSE
+			return args[1].eval(data);
+		}
+
+	}));
 	
 	// if with guaranteed 3 arguments
 	this->insert(FuncPair("if3",
 	[](TagLib::PropertyMap data , std::vector<Block> args) {
-
-		if (args[0].eval(data).success) {
-			// TRUE
-			return args[1].eval(data);
-		} else {
-			// FALSE
-			return args[2].eval(data);
+		// FIXME : This should not be processed here
+		if (args.size() < 3) {
+			throw InvalidNumberOfArugments("Expected 2 or greater arguments");
 		}
-
+		
+		// Check a1..aN if true, return 
+		for (unsigned int i = 0; i < args.size() - 1; i++) {
+			BlockResult result = args[i].eval(data);
+			if (result.success) {
+				return result;
+			}
+		}
+		// return `else` if a1..aN is all false
+		return args[args.size() -1].eval(data);
 	}));
 
 	// Logical Operators
@@ -68,7 +91,7 @@ FuncMap::FuncMap() {
 		if (args.size() < 2) {
 			throw InvalidNumberOfArugments("Expected 2 or greater arguments");
 		}
-		
+
 		BlockResult rs;
 		rs.success = false;
 		for(auto& arg : args) {
@@ -96,7 +119,7 @@ FuncMap::FuncMap() {
 		if (args.size() < 2) {
 			throw InvalidNumberOfArugments("Expected 2 or greater arguments");
 		}
-		
+
 		BlockResult rs;
 		rs.success = true;
 		for(auto& arg : args) {
