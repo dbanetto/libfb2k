@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include "libfb2k/Block.h"
-#include <tpropertymap.h>
+#include <tag.h>
 
 namespace fb2k
 {
