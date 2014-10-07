@@ -6,7 +6,7 @@ compiler:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install libtag1-dev libunittest++-dev
+  - sudo apt-get -t precise-backports install libtag1-dev libunittest++-dev
 
 install:
   - cmake CMakeLists.txt
