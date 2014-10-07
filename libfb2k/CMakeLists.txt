@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(fb2k)
+project(libfb2k)
 
 # CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
 
 # Match build folder structure to src
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
 # Find Libraries
 find_package(tag REQUIRED)
@@ -30,15 +30,15 @@ target_link_libraries(fb2k ${TAG_LIBRARIES})
 find_package(UnitTest++ QUIET)
 if (UNITTEST++_FOUND)
 	enable_testing()
-	
+
 	add_executable(fb2kTest
 		tests/runner.cpp
 		tests/BlockTest.cpp
 		tests/FunctionTest.cpp
 	)
-	
+
 	add_dependencies(fb2kTest fb2k)
-	
+
 	include_directories(${UNITTEST++_INCLUDE_DIR})
 	include_directories(${TAG_INCLUDE_DIR})
 	include_directories(${PROJECT_SOURCE_DIR}/include)

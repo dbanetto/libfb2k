@@ -1,0 +1,16 @@
+before_install:
+- sudo apt-get update
+- sudo apt-get install taglib unittest++
+
+language: cpp
+install:
+- cmake . && make
+
+script: ./build/libfb2k/fb2ktest
+
+branches:
+  only:
+    - master
+os:
+- linux
+- osx

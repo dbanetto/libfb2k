@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(tf2k)
 
 # Match build folder structure to src
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
 # Find Libraries
 find_package(tag REQUIRED)
