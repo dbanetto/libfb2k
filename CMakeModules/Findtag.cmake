@@ -12,6 +12,7 @@ set(TAG_DEFINITIONS ${TAG_CFLAGS_OTHER})
 exec_program("taglib-config --cflags" OUTPUT_VARIABLE TAG_INCLUDE_DIR)
 string(REGEX REPLACE "^-I" "" TAG_INCLUDE_DIR ${TAG_INCLUDE_DIR})
 
+message("-- Found Taglib include path: " ${TAG_INCLUDE_DIR})
 find_library(TAG_LIBRARY NAMES tag
              HINTS ${TAG_LIBDIR} ${TAG_LIBRARY_DIRS} )
 

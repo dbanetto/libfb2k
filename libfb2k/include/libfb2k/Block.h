@@ -5,9 +5,7 @@
 #include <vector>
 
 #include <taglib.h>
-#include <tpropertymap.h>
-#include <tstringlist.h>
-
+#include <tag.h>
 
 #include "error.h"
 

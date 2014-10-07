@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 
 project(libfb2k)
 
-# CMake modules
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
-
 # Match build folder structure to src
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
