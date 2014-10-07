@@ -1,10 +1,11 @@
 before_install:
 - sudo apt-get update
-- sudo apt-get install taglib unittest++
+- sudo apt-get install libtag1-dev libunittest++-dev
 
 language: cpp
 install:
-- cmake . && make
+- cmake CMakeLists.txt
+- make
 
 script: ./build/libfb2k/fb2ktest
 
