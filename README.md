@@ -1,6 +1,8 @@
 libfb2k
 =======
 
+[![Build Status](https://travis-ci.org/zyphrus/libfb2k.svg?branch=master)](https://travis-ci.org/zyphrus/libfb2k)
+
 A C++ library to provide a syntax formatting language
 like the one provided in [foobar2000](http://www.foobar2000.org/)
 

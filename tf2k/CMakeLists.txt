@@ -10,9 +10,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 find_package(tag REQUIRED)
 find_package(fb2k REQUIRED)
 
-# Add global definitions
-add_definitions("-Wall")
-add_definitions("-std=c++11")
+# CXX flags
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 include_directories(${TAG_INCLUDE_DIR})
 include_directories(${FB2K_INCLUDE_DIR})
