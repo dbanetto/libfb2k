@@ -13,7 +13,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 find_package(tag REQUIRED)
 
 # CXX Flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 include_directories(${TAG_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/include)

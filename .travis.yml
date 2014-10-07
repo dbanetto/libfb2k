@@ -1,17 +1,19 @@
-before_install:
-- sudo apt-get update
-- sudo apt-get install libtag1-dev libunittest++-dev
-
 language: cpp
+
+compiler:
+  - gcc
+  - clang
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install libtag1-dev libunittest++-dev
+
 install:
-- cmake CMakeLists.txt
-- make
+  - cmake CMakeLists.txt
+  - make
 
 script: ./build/libfb2k/fb2ktest
 
 branches:
   only:
     - master
-os:
-- linux
-- osx

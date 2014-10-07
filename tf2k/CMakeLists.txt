@@ -11,7 +11,7 @@ find_package(tag REQUIRED)
 find_package(fb2k REQUIRED)
 
 # CXX flags
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 include_directories(${TAG_INCLUDE_DIR})
 include_directories(${FB2K_INCLUDE_DIR})
