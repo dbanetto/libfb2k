@@ -59,7 +59,7 @@ This is only a basic list of core functions and variables
 - [x] $and(...)
 - [x] $or(...)
 - [x] $not(x)
-- [ ] $xor(...)
+- [x] $xor(...)
 
 ## String functions
 

@@ -106,11 +106,18 @@ FuncMap::FuncMap() {
 
 	this->insert(FuncPair("xor",
 	[](TagLib::PropertyMap data , std::vector<Block> args) {
+		if (args.size() < 2) {
+			throw InvalidNumberOfArugments("Expected 2 or greater arguments");
+		}
 
 		BlockResult rs;
-		rs.success = args[0].eval(data).success ^ args[1].eval(data).success;
+		rs.success = false;
+		for(auto& arg : args) {
+			if (arg.eval(data).success) {
+				rs.success = !rs.success;
+			}
+		}
 		return rs;
-
 	}));
 
 	this->insert(FuncPair("and",

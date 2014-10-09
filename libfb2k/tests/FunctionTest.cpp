@@ -224,6 +224,34 @@ SUITE(LogicalFunctions) {
 		CHECK_EQUAL(true, result.success);
 	}
 	
+	TEST(MULTI_XOR) {
+		fb2k::Block blk = fb2k::Block("$xor(%artist%,%album%,%title%)");
+
+		TagLib::PropertyMap metadata;
+
+		auto result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		TagLib::StringList ls;
+		ls.append("Foobar");
+		metadata.insert("artist", ls);
+
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+
+		metadata.insert("album", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(false, result.success);
+
+		metadata.insert("title", ls);
+		result = blk.eval(metadata);
+		CHECK_EQUAL("", result.result);
+		CHECK_EQUAL(true, result.success);
+	}
+	
 	TEST(IF2) {
 		fb2k::Block blk = fb2k::Block("$if2(%artist%,then)");
 
