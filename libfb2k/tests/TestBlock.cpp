@@ -305,9 +305,10 @@ SUITE(BlockEval) {
 	}
 	
 	TEST(BlockEvalFileRed) {
-		fb2k::Block blk = fb2k::Block("%artist% %title% %album% %channels% %length% %bitrate% %samplerate%");
+		fb2k::Block blk = fb2k::Block("%filename% %artist% %title% %album% %channels% %length% %bitrate% %samplerate%");
 
 		TagLib::FileRef file("test.flac");
-		CHECK_EQUAL("FOO BAR TEST mono 10 10107 1010744100", blk.eval(file).result);
+		// FIXME: I do not trust the output of channels, length and samplerate. They all seem to be sections of each other
+		CHECK_EQUAL("test.flac FOO BAR TEST mono 10 10107 1010744100", blk.eval(file).result);
 	}
 }

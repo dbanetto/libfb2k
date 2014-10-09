@@ -139,7 +139,7 @@ This is only a basic list of core functions and variables
 
 ###  Special fields
 
-- [ ]  %filename%
+- [x]  %filename%
 - [ ]  %filename_ext%
 - [ ]  %directoryname%
 - [ ]  %last_modified%

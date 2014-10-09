@@ -269,6 +269,10 @@ BlockResult Block::eval(const TagLib::FileRef& file) {
 	metadata.insert("samplerate",list);
 	list.clear(); ss.clear();
 	
+	list.append(file.file()->name());
+	metadata.insert("filename",list);
+	list.clear(); ss.clear();
+	
 	return this->eval(metadata);
 }
 
