@@ -5,20 +5,17 @@
 #include <vector>
 
 #include <taglib.h>
-#include <tag.h>
+#include <tpropertymap.h> //Only aviable v1.8+
 
 #include "error.h"
 
-#define LIBFB2K_CMD_START '$'
-
-#define LIBFB2K_ARGS_START '('
-#define LIBFB2K_ARGS_END ')'
-
-#define LIBFB2K_VAR_START '%'
-#define LIBFB2K_VAR_END '%'
-
+#define LIBFB2K_CMD_START         '$'
+#define LIBFB2K_ARGS_START        '('
+#define LIBFB2K_ARGS_END          ')'
+#define LIBFB2K_VAR_START         '%'
+#define LIBFB2K_VAR_END           '%'
 #define LIBFB2K_IMPLICIT_IF_START '['
-#define LIBFB2K_IMPLICIT_IF_END ']'
+#define LIBFB2K_IMPLICIT_IF_END   ']'
 
 namespace fb2k
 {

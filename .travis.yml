@@ -5,8 +5,9 @@ compiler:
   - clang
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get -t precise-backports install libtag1-dev libunittest++-dev
+- sudo apt-get update -qq
+- sudo apt-get install -y libtag1-dev/precise-backports
+- sudo apt-get install -y libunittest++-dev
 
 install:
   - cmake CMakeLists.txt

@@ -24,7 +24,7 @@ target_link_libraries(fb2k ${TAG_LIBRARIES})
 
 # Test Suite
 find_package(UnitTest++ QUIET)
-if (UNITTEST++_FOUND)
+if (UNITTEST++_FOUND OR BUILD_TESTS)
 	enable_testing()
 
 	add_executable(fb2kTest
