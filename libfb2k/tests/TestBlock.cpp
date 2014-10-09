@@ -303,4 +303,11 @@ SUITE(BlockEval) {
 
 		CHECK_EQUAL("trueFoobar", blk.eval(metadata).result);
 	}
+	
+	TEST(BlockEvalFileRed) {
+		fb2k::Block blk = fb2k::Block("%artist% %title% %album% %channels% %length% %bitrate% %samplerate%");
+
+		TagLib::FileRef file("test.flac");
+		CHECK_EQUAL("FOO BAR TEST mono 10 10107 1010744100", blk.eval(file).result);
+	}
 }

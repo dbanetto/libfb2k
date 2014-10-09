@@ -29,10 +29,13 @@ if (UNITTEST++_FOUND OR BUILD_TESTS)
 
 	add_executable(fb2kTest
 		tests/runner.cpp
-		tests/BlockTest.cpp
-		tests/FunctionTest.cpp
+		tests/TestBlock.cpp
+		tests/TestControlFlowFunc.cpp
+		tests/TestBoolFunc.cpp
 	)
-
+	add_custom_command(TARGET fb2kTest PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                       ${PROJECT_SOURCE_DIR}/tests/test.flac $<TARGET_FILE_DIR:fb2kTest>)
 	add_dependencies(fb2kTest fb2k)
 
 	include_directories(${UNITTEST++_INCLUDE_DIR})

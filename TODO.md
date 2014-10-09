@@ -20,11 +20,11 @@ This is only a basic list of core functions and variables
 
 ### Technical information
 
-- [ ] %bitrate%
-- [ ] %channels%
+- [x] %bitrate%
+- [x] %channels% (Only mono and stereo channel names)
 - [ ] %filesize%
 - [ ] %filesize_natural%
-- [ ] %samplerate%
+- [x] %samplerate%
 - [ ] %codec%
 
 - [ ] Special fields

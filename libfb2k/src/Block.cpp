@@ -240,7 +240,39 @@ int Block::parse(std::string statement) {
 	return 0;
 }
 
-BlockResult Block::eval(TagLib::PropertyMap metadata) {
+BlockResult Block::eval(const TagLib::FileRef& file) {
+	TagLib::PropertyMap metadata = file.tag()->properties();
+	TagLib::StringList list;
+	std::stringstream ss;
+	// TODO: Needs to be refactored
+	// TODO: Add more 
+	ss << file.audioProperties()->length();
+	list.append(ss.str());
+	metadata.insert("length",list);
+	list.clear(); ss.clear();
+	
+	ss << file.audioProperties()->bitrate();
+	list.append(ss.str());
+	metadata.insert("bitrate",list);
+	list.clear(); ss.clear();
+	
+	if (file.audioProperties()->channels() == 1) {
+		list.append("mono");
+	} else if (file.audioProperties()->channels() == 2) {
+		list.append("stereo");
+	} //TODO: Add more channels names
+	metadata.insert("channels",list);
+	list.clear(); ss.clear();
+	
+	ss << file.audioProperties()->sampleRate();
+	list.append(ss.str());
+	metadata.insert("samplerate",list);
+	list.clear(); ss.clear();
+	
+	return this->eval(metadata);
+}
+
+BlockResult Block::eval(const TagLib::PropertyMap& metadata) {
 	BlockResult result;
 
 	std::sort(this->variables.begin(), this->variables.end() ,

@@ -6,6 +6,7 @@
 
 #include <taglib.h>
 #include <tpropertymap.h> //Only aviable v1.8+
+#include <fileref.h>
 
 #include "error.h"
 
@@ -49,7 +50,8 @@ namespace fb2k
 			virtual ~Block();
 
 			int parse(std::string statement);
-			BlockResult eval(TagLib::PropertyMap metadata);
+			BlockResult eval(const TagLib::PropertyMap& metadata);
+			BlockResult eval(const TagLib::FileRef& fileref);
 
 			std::string getStatement();
 			std::string getFormattedText();
