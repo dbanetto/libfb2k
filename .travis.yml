@@ -5,15 +5,16 @@ compiler:
   - clang
 
 before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -y libtag1-dev/precise-backports
+- sudo add-apt-repository ppa:kubuntu-ppa/backports
+- sudo apt-get update
+- sudo apt-get install -y libtag1-dev
 - sudo apt-get install -y libunittest++-dev
 
 install:
   - cmake CMakeLists.txt
   - make
 
-script: ./build/libfb2k/fb2ktest
+script: ./build/libfb2k/fb2kTest
 
 branches:
   only:
