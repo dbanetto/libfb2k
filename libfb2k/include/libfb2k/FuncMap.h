@@ -1,11 +1,32 @@
 #ifndef FUNCMAP_H
 #define FUNCMAP_H
 
+#include "libfb2k/Block.h"
+#include <vector>
+#include <tpropertymap.h>
+
 #include <map> // Base class: std::map
-#include "libfb2k/Function.h"
 
 namespace fb2k
 {
+// FIXME : GET BETTER NAMES!
+typedef BlockResult ( *FB2KFunction ) ( TagLib::PropertyMap metadata , std::vector<Block> args );
+typedef bool ( *FB2KParameterCheck ) ( unsigned int argscount );
+
+
+struct Func {
+    std::string name;
+    FB2KFunction eval = nullptr;
+    FB2KParameterCheck check = nullptr;
+    Func ( std::string name, FB2KFunction eval, FB2KParameterCheck check ) {
+        this->name = name;
+        this->eval = eval;
+        this->check = check;
+    }
+    Func() {}
+};
+typedef std::pair<std::string, Func> FuncPair;
+
 class FuncMap : public std::map<std::string, Func>
 {
 public:
