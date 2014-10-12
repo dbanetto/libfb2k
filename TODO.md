@@ -45,9 +45,9 @@ This is only a basic list of core functions and variables
 
 - [x] $add(a,b)
 - [x] $div(a,b)
-- [ ] $greater(a,b)
-- [ ] $max(a,b)
-- [ ] $min(a,b)
+- [x] $greater(a,b)
+- [x] $max(a,b)
+- [x] $min(a,b)
 - [ ] $mod(a,b)
 - [x] $mul(a,b)
 - [ ] $muldiv(a,b,c)

@@ -18,7 +18,7 @@ SUITE(FunctionMap)
         CHECK_EQUAL(8, map.size());
 
         map.enableMathsFuncs();
-        CHECK_EQUAL(12, map.size());
+        CHECK_EQUAL(15, map.size());
     }
 
     TEST(Contructor) {
@@ -26,10 +26,10 @@ SUITE(FunctionMap)
         CHECK_EQUAL(0, map.size());
 
         map = FuncMap(true);
-        CHECK_EQUAL(12, map.size());
+        CHECK_EQUAL(15, map.size());
 
         map = FuncMap();
-        CHECK_EQUAL(12, map.size());
+        CHECK_EQUAL(15, map.size());
     }
 
     TEST(InsertExisting) {

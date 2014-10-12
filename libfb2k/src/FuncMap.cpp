@@ -3,15 +3,13 @@
 #include <sstream>
 using namespace fb2k;
 
-FuncMap::FuncMap()
-{
+FuncMap::FuncMap() {
     enableControlFuncs();
     enableBoolFuncs();
     enableMathsFuncs();
 }
 
-FuncMap::FuncMap(bool enableDefaults)
-{
+FuncMap::FuncMap(bool enableDefaults) {
     if (enableDefaults) {
         enableControlFuncs();
         enableBoolFuncs();
@@ -19,8 +17,7 @@ FuncMap::FuncMap(bool enableDefaults)
     }
 }
 
-bool FuncMap::check(std::string name, std::vector<Block> args)
-{
+bool FuncMap::check(std::string name, std::vector<Block> args) {
     if (find(name) != end()) {
         return (*this) [name].check(args.size());
     }
@@ -28,8 +25,7 @@ bool FuncMap::check(std::string name, std::vector<Block> args)
     throw fb2k::InvalidFunctionName("Unknown Function name");
 }
 
-void FuncMap::insert(Func function)
-{
+void FuncMap::insert(Func function) {
     if (function.check != nullptr && function.check != nullptr) {
         if (this->find(function.name) == this->end()) {
             map::insert<FuncPair> (FuncPair(function.name, function));
@@ -45,18 +41,15 @@ void FuncMap::insert(Func function)
     }
 }
 
-void FuncMap::insertOverride(Func function)
-{
+void FuncMap::insertOverride(Func function) {
     map::insert<FuncPair> (FuncPair(function.name, function));
 }
 
-FuncMap::~FuncMap()
-{
+FuncMap::~FuncMap() {
 
 }
 
-void FuncMap::enableControlFuncs()
-{
+void FuncMap::enableControlFuncs() {
     //Implicit if
     this->insertOverride(Func("[",
     [](TagLib::PropertyMap data , std::vector<Block> args) {
@@ -147,8 +140,7 @@ void FuncMap::enableControlFuncs()
 }
 
 
-void FuncMap::enableBoolFuncs()
-{
+void FuncMap::enableBoolFuncs() {
 // Logical Operators
     // NOTE :  Logical Operators DO NOT return result strings, just a boolean
     // TODO: add implies, equals and equivalent
@@ -238,8 +230,7 @@ void FuncMap::enableBoolFuncs()
     }));
 }
 
-void FuncMap::enableMathsFuncs()
-{
+void FuncMap::enableMathsFuncs() {
     // Returns a string with that represents the value that was calculated
     this->insertOverride(Func("add",
     [](TagLib::PropertyMap data , std::vector<Block> args) {
@@ -332,6 +323,66 @@ void FuncMap::enableMathsFuncs()
             return true;
         } else {
             throw InvalidNumberOfArugments("Expected only 2 or greater arguments for mul");
+        }
+    }));
+
+    this->insertOverride(Func("greater",
+    [](TagLib::PropertyMap data , std::vector<Block> args) {
+        BlockResult rs;
+        rs.success = (args[0].eval(data).value > args[1].eval(data).value);
+        return rs;
+    },
+    [](unsigned int argscount) {
+        if (argscount == 2) {
+            return true;
+        } else {
+            throw InvalidNumberOfArugments("Expected only 2 arguments for greater");
+        }
+    }));
+
+    this->insertOverride(Func("min",
+    [](TagLib::PropertyMap data , std::vector<Block> args) {
+        //Is ((a/b)/c)...
+        BlockResult rs;
+        int min = args[0].eval(data).value;
+
+        for (unsigned int i = 1; i < args.size(); i++) {
+            int v = args[i].eval(data).value;
+            min = (min > v ? v : min);
+        }
+
+        rs.value = min;
+        rs.result = std::to_string(rs.value);
+        return rs;
+    },
+    [](unsigned int argscount) {
+        if (argscount >= 2) {
+            return true;
+        } else {
+            throw InvalidNumberOfArugments("Expected only 2 or greater arguments for min");
+        }
+    }));
+
+    this->insertOverride(Func("max",
+    [](TagLib::PropertyMap data , std::vector<Block> args) {
+        //Is ((a/b)/c)...
+        BlockResult rs;
+        int max = args[0].eval(data).value;
+
+        for (unsigned int i = 1; i < args.size(); i++) {
+            int v = args[i].eval(data).value;
+            max = (max < v ? v : max);
+        }
+
+        rs.value = max;
+        rs.result = std::to_string(rs.value);
+        return rs;
+    },
+    [](unsigned int argscount) {
+        if (argscount >= 2) {
+            return true;
+        } else {
+            throw InvalidNumberOfArugments("Expected only 2 or greater arguments for max");
         }
     }));
 }

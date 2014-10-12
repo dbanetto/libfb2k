@@ -2,8 +2,7 @@
 #include "libfb2k/libfb2k.h"
 #include "libfb2k/Block.h"
 
-SUITE(ArithmeticFunctions)
-{
+SUITE(ArithmeticFunctions) {
     TEST(add) {
         fb2k::Block blk = fb2k::Block("$add(1,2)");
         TagLib::PropertyMap metadata;
@@ -114,6 +113,58 @@ SUITE(ArithmeticFunctions)
         CHECK_EQUAL("0", result.result);
         CHECK_EQUAL(false, result.success);
         CHECK_EQUAL(0, result.value);
+    }
+
+    TEST(min) {
+        fb2k::Block blk = fb2k::Block("$min(2,1)");
+        TagLib::PropertyMap metadata;
+
+        auto result = blk.eval(metadata);
+        CHECK_EQUAL("1", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(1, result.value);
+
+        blk = fb2k::Block("$min(1,2)");
+        metadata = TagLib::PropertyMap();
+
+        result = blk.eval(metadata);
+        CHECK_EQUAL("1", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(1, result.value);
+
+        blk = fb2k::Block("$min(1,2,3,4)");
+        metadata = TagLib::PropertyMap();
+
+        result = blk.eval(metadata);
+        CHECK_EQUAL("1", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(1, result.value);
+    }
+
+    TEST(max) {
+        fb2k::Block blk = fb2k::Block("$max(2,1)");
+        TagLib::PropertyMap metadata;
+
+        auto result = blk.eval(metadata);
+        CHECK_EQUAL("2", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(2, result.value);
+
+        blk = fb2k::Block("$max(1,2)");
+        metadata = TagLib::PropertyMap();
+
+        result = blk.eval(metadata);
+        CHECK_EQUAL("2", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(2, result.value);
+
+        blk = fb2k::Block("$max(1,2,3,4)");
+        metadata = TagLib::PropertyMap();
+
+        result = blk.eval(metadata);
+        CHECK_EQUAL("4", result.result);
+        CHECK_EQUAL(false, result.success);
+        CHECK_EQUAL(4, result.value);
     }
 
 }
