@@ -16,14 +16,18 @@ typedef bool ( *FB2KParameterCheck ) ( unsigned int argscount );
 
 struct Func {
     std::string name;
-    FB2KFunction eval = nullptr;
-    FB2KParameterCheck check = nullptr;
+    FB2KFunction eval;
+    FB2KParameterCheck check;
     Func ( std::string name, FB2KFunction eval, FB2KParameterCheck check ) {
         this->name = name;
         this->eval = eval;
         this->check = check;
     }
-    Func() {}
+    Func() {
+        eval = nullptr;
+        check = nullptr;
+        name = "";
+    }
 };
 typedef std::pair<std::string, Func> FuncPair;
 
