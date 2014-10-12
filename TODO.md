@@ -43,16 +43,16 @@ This is only a basic list of core functions and variables
 
 ## Arithmetic functions
 
-- [ ] $add(a,b)
-- [ ] $div(a,b)
+- [x] $add(a,b)
+- [x] $div(a,b)
 - [ ] $greater(a,b)
 - [ ] $max(a,b)
 - [ ] $min(a,b)
 - [ ] $mod(a,b)
-- [ ] $mul(a,b)
+- [x] $mul(a,b)
 - [ ] $muldiv(a,b,c)
 - [ ] $rand()
-- [ ] $sub(a,b)
+- [x] $sub(a,b)
 
 ## Boolean functions
 

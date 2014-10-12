@@ -32,6 +32,8 @@ if (UNITTEST++_FOUND OR BUILD_TESTS)
 		tests/TestBlock.cpp
 		tests/TestControlFlowFunc.cpp
 		tests/TestBoolFunc.cpp
+		tests/TestArithmeticFunc.cpp
+		tests/TestFuncMap.cpp
 	)
 	add_custom_command(TARGET fb2kTest PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
